@@ -38,8 +38,8 @@ CL-CUDD comes with an ASDF definition. So you add the directory
 containing `cl-cudd.asd` to your `asdf:*central-registry*` and
 then load CL-CUDD via `(asdf:operate 'asdf:load-op 'cl-cudd)`.
 
-This distribution comes with automically generated bindings from
-CUDD in file `cuddapi.lisp`. If you want to regnerate the bindings
+This distribution comes with atomically generated bindings from
+CUDD in file `cuddapi.lisp`. If you want to regenerate the bindings
 for some reason, also see the `Makefile`. After that, you have
 probably have to edit the generated code. Function
 `Cudd_PrioritySelect` has a parameter `Pi`. You have to rename
@@ -64,7 +64,7 @@ of class `node`. ADD nodes are wrapped in an instance of `add-node`
 and BDD nodes are wrapped in an instance of type `bdd-node`.
 
 This enables runtime type checking (so that you don't stick ADD nodes
-into BDD functions or vice versa) and also automatic reference counting.
+into BDD functions or vice-versa) and also automatic reference counting.
 
 Almost all CUDD functions need to refer to a CUDD manager. In the
 high-level API this manager is contained in special variable
