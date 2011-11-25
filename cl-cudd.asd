@@ -10,7 +10,7 @@
   :components ((:file "package")
                (:file "cuddapi" :depends-on ("package"))
                (:file "cudd" :depends-on ("package" "cuddapi"))
-  :description ("A two-layered binding to the CUDD binary decision diagramm library.
+  :description ("A two-layered binding to the CUDD binary decision diagram library.
 
 See README.md for more details.")
 ))
