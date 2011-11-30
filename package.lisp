@@ -63,6 +63,7 @@
    #:DISABLE-GC
    #:ENABLE-GC
    #:EXIST-ABSTRACT
+   #:UNIV-ABSTRACT
    #:IF-THEN-ELSE
    #:MAKE-VAR
    #:MANAGER
@@ -76,4 +77,22 @@
    #:NODE-INDEX
    #:OR-ABSTRACT
    #:SWAP-VARIABLES
-   #:WITH-MANAGER))
+   #:WITH-MANAGER
+
+   #:add->bdd-interval
+   #:add->bdd-threshold
+   #:add->bdd-strict-threshold
+
+   #:node-or
+   #:node-and
+
+   #:plus-infinity
+   #:minus-infinity
+
+   #:min-abstract
+   #:max-abstract
+
+   #:one-node
+   #:zero-node
+
+   #:with-nodes))
