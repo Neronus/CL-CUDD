@@ -75,6 +75,53 @@ You can also create a manager by
 All functions of package `CL-CUDD` are documented using the original or
 slightly modified documentation of CUDD.
 
+Known problems
+--------------
+
+Using the GC to do reference counting automatically has its own share of problems:
+
+1. References may be freed very late.
+
+   Nodes will be dereferenced only if your CL implementation thinks
+   that it's time for it. This is usually when itself is running out
+   of memory. Because you are usually only holding on to the top of
+   a diagram, you are not using as much memory in CL as you are using
+   in CUDD. Hence the GC might come pretty late while CUDD is happily
+   accumulating memory.
+
+   The solution to that is to try to call the garbage collector
+   manually every so often using for example
+   TRIVIAL-GARBAGE:GC
+
+2. References may be freed too early
+
+   The following two examples demonstrate the problem.
+
+        (defun foo (dd)
+          (let ((ptr (node-pointer dd)))
+            ;; please don't GC me here
+            (cudd-do-something ptr)))
+
+   In this example the GC might decide to run where there is the
+   comment.
+   In that case, provided that nothing outside of the function call
+   holds on to `dd`, the reference count of `ptr` might be decreased,
+   go down to zero and the node vanishes before `cudd-do-something` is
+   called.
+   The solution: Instead of `let`, use macro `with-pointers` which
+   increases the reference count of each node before the body and
+   decreases the reference count of each node after the body.
+
+       (defun bar (dd)
+         (cudd-do-something-with-callback (node-pointer dd)))
+
+   In this case, we might have a problem if
+   `cudd-do-something-with-callback` calls back into
+   lisp, upon which point lisp garbage collects and decreases
+   the reference count of `dd`.
+   
+   Solution: Again, use `with-pointers` instead of `node-pointer`.
+
 Examples
 --------
 *TODO*
