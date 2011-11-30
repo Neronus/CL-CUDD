@@ -462,6 +462,39 @@ instead of having a complement pointer to 1."))
 If abstracting an ADD, we assume that it is an 0-1-ADD
 ")
 
+(def-cudd-call univ-abstract ((:add cudd-add-univ-abstract :bdd cudd-bdd-univ-abstract)
+                              (f :node) (cube :node))
+  :generic "Abstracts all the variables in cube from the DD f by
+  taking the conjunction over all possible values taken by the
+  variables.
+
+If abstracting an ADD, we assume that it is an 0-1-ADD")
+
+(def-cudd-call min-abstract ((:add cudd-add-min-abstract) (f :node) (cube :node))
+  :generic "Abstracts all the variables in cube from the ADD f by
+  taking the minimum over all possible values taken by the
+  variables.")
+
+(def-cudd-call max-abstract ((:add cudd-add-max-abstract) (f :node) (cube :node))
+  :generic "Abstracts all the variables in cube from the ADD f by
+  taking the maximum over all possible values taken by the
+  variables.")
+
+(def-cudd-call zero-node ((:common (lambda (dd type)
+                                     (wrap-and-finalize
+                                      (cudd-read-zero dd)
+                                      type))) type)
+  :generic "Return the zero node."
+  :dont-wrap-result t)
+
+(def-cudd-call one-node ((:common (lambda (dd type)
+                                     (wrap-and-finalize
+                                      (cudd-read-one dd)
+                                      type)))
+                         type)
+  :generic "Return the one node."
+  :dont-wrap-result t)
+
 ;;;_. Functions for add-apply
 (handler-bind
     ((sb-ext:defconstant-uneql
