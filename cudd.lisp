@@ -146,17 +146,23 @@ Set the finalizer to call cudd-recursive-deref."
              (clean-arguments (arguments)
                (mapcar (lambda (arg)
                          (if (and (listp arg) (eq (second arg) :node))
-                             `(node-pointer ,(first arg))
-                             arg)) arguments)))
+                             (first arg)
+                             arg)) arguments))
+             (make-funcall (native arguments)
+               `(with-pointers
+                    ,(loop
+                        :for arg :in arguments
+                        :when (and (listp arg) (eq (second arg) :node))
+                        :collect `(,(first arg) ,(first arg)))
+                    (funcall #',native
+                             (manager-pointer *manager*)
+                             ,@(clean-arguments arguments)))))
       (with-gensyms (pointer)
         `(defmethod ,generic-name ,(convert-arguments arguments)
            ,(if dont-wrap-result
-                `(funcall #',native-function (manager-pointer *manager*)
-                          ,@(clean-arguments arguments))
+                (make-funcall native-function arguments)
                 `(let* ((,pointer
-                         (funcall #',native-function
-                                  (manager-pointer *manager*)
-                                  ,@(clean-arguments arguments))))
+                         ,(make-funcall native-function arguments)))
                    (wrap-and-finalize ,pointer ',node-type)))))))
 
   (defun add-function (generic-name arguments add-function dont-wrap)
