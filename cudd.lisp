@@ -45,6 +45,45 @@ Every function in this package works with this manager.")
   (:documentation
    "Node of an algebraic decision diagram (ADD)"))
 
+(defmacro with-pointers (pointers &body body)
+  "Create a binding to pointers using a let-like specification.
+Takes care that the nodes stay alive during the body.
+
+Example:
+(with-pointers ((f-ptr f)
+                (g-ptr g))
+  (cudd-add-apply +or+ f-ptr g-ptr))
+
+This is implemented by increasing the reference count of
+every node in the body and decreasing it after the body is run"
+  (let ((manager (gensym "manager")))
+    `(let* ((,manager (manager-pointer *manager*)))
+       (progn
+         ;; Reference all pointers
+         ;; Effectively, we call node-pointer twice on every wrapper.
+         ;; The reason is that we have to keep holding on to
+         ;; the wrapper until after all referencing is done, i.e.,
+         ;; until after the following code block ran.
+         ;; Therefore, we first call `(cudd-ref (node-pointer wrapper))`
+         ;; for each wrapper. Then later we create the binding for
+         ;; the pointers.
+         ,@(loop
+              :for binding :in pointers
+              :unless (and (listp binding) (= (length binding) 2))
+              :do (error "Binding ~A is mal-formed" binding)              
+              :collect `(cudd-ref (node-pointer ,(cadr binding))))
+         (let
+             ;; Create bindings
+             ,(loop
+                 :for binding :in pointers
+                 :collect `(,(car binding) (node-pointer ,(cadr binding))))
+           (unwind-protect
+                (progn
+                  ,@body)
+             ,@(loop
+                  :for binding :in pointers
+                  :collect `(cudd-recursive-deref ,manager ,(car binding)))))))))
+
 ;; TODO Print more information, like the value if it is a leaf node
 (defmethod print-object ((object node) stream)
   (print-unreadable-object (object stream :type (type-of object) :identity nil)
