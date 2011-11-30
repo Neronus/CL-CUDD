@@ -224,6 +224,12 @@ Set the finalizer to call cudd-recursive-deref."
   :add     "Disjunction of two 0-1 ADDs."
   :bdd     "Disjunction of two BDDs.")
 
+(def-cudd-call node-and ((:add (lambda (mgr f g) (cudd-add-apply mgr +times+ f g))
+                         :bdd cudd-bdd-and) (f :node) (g :node))
+  :generic "Conjunction of two 0-1 ADDs or two BDDs."
+  :add     "Conjunction of two 0-1 ADDs."
+  :bdd     "Conjunction of two BDDs.")
+
 (def-cudd-call disable-gc ((:common cudd-disable-garbage-collection))
                :generic "Disables garbage collection. Garbage
 collection is initially enabled. This function may be called to
@@ -313,6 +319,37 @@ and H being the else branch"
   ADD."
   :bdd "Implements ITE(f,g,h).")
 
+(def-cudd-call add->bdd-interval (() (f :node) lower upper)
+  :generic "Converts an ADD to a BDD by replacing all discriminants greater than or equal to lower and less than or equal to upper with 1, and all other discriminants with 0.")
+
+(defmethod add->bdd-interval ((f add-node) lower upper)
+  (wrap-and-finalize (cudd-add-bdd-interval
+                      (manager-pointer *manager*)
+                      (node-pointer f)
+                      lower upper)
+                     'bdd-node))
+
+
+(def-cudd-call add->bdd-strict-threshold (() (f :node) threshold)
+  :generic "Converts an ADD to a BDD by replacing all discriminants STRICTLY greater than value with 1, and all other discriminants with 0.")
+
+(defmethod add->bdd-strict-threshold ((f add-node) threshold)
+  (wrap-and-finalize (cudd-add-bdd-strict-threshold
+                      (manager-pointer *manager*)
+                      (node-pointer f)
+                      threshold)
+                     'bdd-node))
+
+(def-cudd-call add->bdd-threshold (() (f :node) threshold)
+  :generic "Converts an ADD to a BDD by replacing all discriminants greater than or equal to value with 1, and all other discriminants with 0.")
+
+(defmethod add->bdd-threshold ((f add-node) threshold)
+  (wrap-and-finalize (cudd-add-bdd-threshold
+                      (manager-pointer *manager*)
+                      (node-pointer f)
+                      threshold)
+                     'bdd-node))
+
 (defgeneric cube (nodes type)
   (:documentation "Build a cube from a list of nodes. TYPE defines which nodes we have
 in the list of nodes: ADD-NODE or BDD-NODE"))
@@ -327,6 +364,15 @@ in the list of nodes: ADD-NODE or BDD-NODE"))
 
 (defmethod cube (nodes (type (eql 'nil)))
   (cube nodes (type-of (first nodes))))
+
+(def-cudd-call plus-infinity ((:add cudd-read-plus-infinity))
+  :generic
+  "Return node with value infinity.")
+
+(def-cudd-call minus-infinity ((:add cudd-read-minus-infinity))
+  :generic
+  "Return node with value -infinity.")
+
 
 (defgeneric make-var (type &key level nr)
   (:documentation
