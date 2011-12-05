@@ -216,9 +216,17 @@ Set the finalizer to call cudd-recursive-deref."
   (let ((i (gensym "i"))
         (e (gensym "e")))
     `(with-foreign-object (,array :pointer (length ,seq))
-       (loop :for ,e :being :each :element :of ,seq
-             :for ,i  :from 0
-             :do (setf (mem-aref ,array :pointer ,i) (node-pointer ,e)))
+       (let ((,i 0))
+         (map nil
+              (lambda (,e)
+                (setf (mem-aref ,array :pointer ,i) (node-pointer ,e)
+                      ,i (+ ,i 1)))
+              ,seq
+              ))
+
+       #+nil (loop :for ,e :being :each :element :of ,seq
+          :for ,i  :from 0
+          :do (setf (mem-aref ,array :pointer ,i) (node-pointer ,e)))
        ,@body)))
 
 (def-cudd-call node-or ((:add (lambda (mgr f g) (cudd-add-apply mgr +or+ f g))
