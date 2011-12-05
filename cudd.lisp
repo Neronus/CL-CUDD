@@ -172,11 +172,14 @@ Set the finalizer to call cudd-recursive-deref."
   (defun common-function (generic-name arguments function dont-wrap)
     (node-function generic-name arguments function t dont-wrap))
   (defun set-add-docu (add-function add-docu)
-    `(setf (documentation ',add-function 'function) ,add-docu))
+    (when (symbolp add-function)
+     `(setf (documentation ',add-function 'function) ,add-docu)))
   (defun set-bdd-docu (bdd-function bdd-docu)
-    `(setf (documentation ',bdd-function 'function) ,bdd-docu))
+    (when (symbolp bdd-function)
+     `(setf (documentation ',bdd-function 'function) ,bdd-docu)))
   (defun set-common-docu (function docu)
-    `(setf (documentation ',function 'function) ,docu))
+    (when (symbolp function)
+     `(setf (documentation ',function 'function) ,docu)))
 
 
   (defun find-2list (item 2list)
