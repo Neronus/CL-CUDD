@@ -40,10 +40,7 @@ then load CL-CUDD via `(asdf:operate 'asdf:load-op 'cl-cudd)`.
 
 This distribution comes with atomically generated bindings from
 CUDD in file `cuddapi.lisp`. If you want to regenerate the bindings
-for some reason, also see the `Makefile`. After that, you have
-probably have to edit the generated code. Function
-`Cudd_PrioritySelect` has a parameter `Pi`. You have to rename
-that variable to something else.
+for some reason, also see the `Makefile`. 
 
 Using the system
 ----------------
