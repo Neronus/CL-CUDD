@@ -260,7 +260,7 @@ only if garbage collection has been explicitly disabled."
 that the DdNode pointer bck is already referenced."
   :dont-wrap-result t)
 
-;;;_ Algebraic Descision Diagrams
+;;;_ Algebraic Decision Diagrams
 
 (defun node-index (node)
   (cudd-node-read-index (node-pointer node)))
