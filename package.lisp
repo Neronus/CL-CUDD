@@ -9,6 +9,7 @@
 ;;; Low-level interface:
 (defpackage #:cuddapi
   (:use :cl :cffi :swig-macros :alexandria)
+  (:shadow #:pi)
   (:export #:cudd-manager #:cudd-node #:cudd-bdd-not #:cudd-add-cube #:cudd-bdd-cube
            #:dump-dot #:add-var #:bdd-var #:print-info #:+cudd-max-index+ #:cudd-node-is-constant
            #:cudd-node-get-value #:cudd-node-get-then #:cudd-node-get-else

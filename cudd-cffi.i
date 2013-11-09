@@ -35,7 +35,7 @@
                                  (cl:t (cl:cons c rest)))))
                       ((cl:char-equal c #\_)
                        (helper (cl:cdr lst) '_ (cl:cons #\- rest)))
-		      ((cl:char-equal c #\-)
+                      ((cl:char-equal c #\-)
                        (helper (cl:cdr lst) '- (cl:cons #\- rest)))
                       (cl:t
                        (cl:error "Invalid character: ~A" c)))))
@@ -133,7 +133,15 @@
 /* Now parse and wrap the API header */
 %insert ("swiglisp") %{
 
-(cffi:load-foreign-library "libcudd.so")
+(cffi:define-foreign-library libcudd
+  (t (:default "libcudd")))
+
+(let ((libdir "/opt/local/lib/cudd/"))
+  (when (probe-file libdir)
+    (pushnew libdir cffi:*foreign-library-directories* :test #'string=)))
+                
+
+(cffi:use-foreign-library libcudd)
 
 (eval-when (:compile-toplevel :load-toplevel)
   ;; Muffle compiler-notes globally

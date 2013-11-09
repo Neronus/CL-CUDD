@@ -40,10 +40,7 @@ then load CL-CUDD via `(asdf:operate 'asdf:load-op 'cl-cudd)`.
 
 This distribution comes with atomically generated bindings from
 CUDD in file `cuddapi.lisp`. If you want to regenerate the bindings
-for some reason, also see the `Makefile`. After that, you have
-probably have to edit the generated code. Function
-`Cudd_PrioritySelect` has a parameter `Pi`. You have to rename
-that variable to something else.
+for some reason, also see the `Makefile`. 
 
 Using the system
 ----------------
@@ -70,7 +67,7 @@ Almost all CUDD functions need to refer to a CUDD manager. In the
 high-level API this manager is contained in special variable
 `*manager*`. You can bind a manager using the macro `with-manager`.
 You can also create a manager by
-`(make-instance 'manager :pointer (cuddapi:manager ...))`.
+`(make-instance 'manager :pointer (cudd-init 0 0 256 262144 0))`.
 
 All functions of package `CL-CUDD` are documented using the original or
 slightly modified documentation of CUDD.
