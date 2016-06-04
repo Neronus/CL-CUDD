@@ -9,9 +9,9 @@
 (eval-when (:compile-toplevel :load-toplevel)
   (declaim (optimize (speed 3) (debug 1) (safety 1))))
 
-(cl:in-package :swig-macros)
+(cl:in-package :cl-cudd.swig-macros)
 
-(cl:defun swig-lispify (name flag cl:&optional (package (find-package :cuddapi)))
+(cl:defun swig-lispify (name flag cl:&optional (package (find-package :cl-cudd.api)))
       (cl:labels ((helper (lst last rest cl:&aux (c (cl:car lst)))
                     (cl:cond
                       ((cl:null lst)
@@ -98,11 +98,11 @@
 
 
 
-(cl:in-package :cuddapi)
+(cl:in-package :cl-cudd.api)
 
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (cl:in-package :cuddapi)
+  (cl:in-package :cl-cudd.api)
 
   (define-condition cudd-condition (condition) ())
   (define-condition cudd-error (cudd-condition error) ())

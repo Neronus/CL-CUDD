@@ -125,7 +125,7 @@ is not a null pointer."
            (when (zerop (cudd-node-get-ref-count (manager-pointer manager) pointer))
              (error "Tried to decrease reference count of node that already
 has refcount zero"))
-           (cuddapi:cudd-recursive-deref
+           (cl-cudd.api:cudd-recursive-deref
             (manager-pointer manager) pointer))))))
 
   (defun wrap-and-finalize (pointer type)
@@ -626,7 +626,7 @@ For the purpose of counting the number of minterms, the function is supposed to 
 
 (defun dd-constantp (dd)
   "Return T if DD is a leaf node, NIL otherwise"
-  (= 0 (cuddapi:cudd-is-non-constant dd)))
+  (= 0 (cl-cudd.api:cudd-is-non-constant dd)))
 
 (def-cudd-call count-minterm (cudd-count-minterm nodes nvars)
   "Counts the number of minterms of a DD. The function is assumed to

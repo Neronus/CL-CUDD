@@ -1,12 +1,12 @@
 ;;;; cl-cudd.asd
 
-(asdf:defsystem #:cl-cudd
+(defsystem cl-cudd
   :serial t
   :author "Christian von Essen <christian@mvonessen.de>"
   :license "BSD Style (see LICENSE)"
-  :depends-on (#:cffi
-               #:alexandria
-               #:trivial-garbage)
+  :depends-on (:cffi
+               :alexandria
+               :trivial-garbage)
   :components ((:file "package")
                (:file "cuddapi" :depends-on ("package"))
                (:file "add-apply-functions" :depends-on ("package"))

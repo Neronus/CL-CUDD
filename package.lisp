@@ -1,14 +1,16 @@
 ;;;; package.lisp
 
-(cl:defpackage :swig-macros
+(in-package :cl-user)
+
+(defpackage cl-cudd.swig-macros
   (:use :cl :cffi)
   (:documentation
    "Package containing utility functions for SWIG cffi interface generation")
   (:export #:swig-lispify #:defanonenum))
 
-;;; Low-level interface:
-(defpackage #:cuddapi
-  (:use :cl :cffi :swig-macros :alexandria)
+(defpackage cl-cudd.api
+  (:documentation "Low-level interface")
+  (:use :cl :cffi :cl-cudd.swig-macros :alexandria)
   (:shadow #:pi)
   (:export #:cudd-manager #:cudd-node #:cudd-bdd-not #:cudd-add-cube #:cudd-bdd-cube
            #:dump-dot #:add-var #:bdd-var #:print-info #:+cudd-max-index+ #:cudd-node-is-constant
@@ -17,10 +19,10 @@
   ;; other exports done by swig
   )
 
-;;; High-level interface
 (defpackage cl-cudd
-  (:use cl cffi swig-macros alexandria cuddapi)
-  (:nicknames cudd)
+  (:documentation "High-level interface")
+  (:use :cl :cffi :alexandria :cl-cudd.swig-macros :cl-cudd.api)
+  (:nicknames :cudd)
   (:export 
    #:+AGREEMENT+
    #:+AND+
