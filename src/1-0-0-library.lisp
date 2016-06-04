@@ -1,5 +1,5 @@
 
-(in-package :cl-cudd.api)
+(in-package :cl-cudd.baseapi)
 
 (define-foreign-library libcudd
   (t (:default "libcudd")))

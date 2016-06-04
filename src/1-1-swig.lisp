@@ -11,7 +11,7 @@
 
 (cl:in-package :cl-cudd.swig-macros)
 
-(cl:defun swig-lispify (name flag cl:&optional (package (find-package :cl-cudd.api)))
+(cl:defun swig-lispify (name flag cl:&optional (package (find-package :cl-cudd.baseapi)))
       (cl:labels ((helper (lst last rest cl:&aux (c (cl:car lst)))
                     (cl:cond
                       ((cl:null lst)
@@ -98,7 +98,7 @@
 
 
 
-(cl:in-package :cl-cudd.api)
+(cl:in-package :cl-cudd.baseapi)
 
 (eval-when (:compile-toplevel :load-toplevel)
     ;; Muffle compiler-notes globally

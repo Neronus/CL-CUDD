@@ -1,4 +1,4 @@
-(in-package :cl-cudd.api)
+(in-package :cl-cudd.baseapi)
 
 (defcfun "fopen" :pointer (path :string) (mode :string))
 (defcfun "fclose" :pointer (file :pointer))

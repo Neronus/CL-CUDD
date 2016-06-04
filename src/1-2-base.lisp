@@ -1,5 +1,5 @@
 
-(in-package :cl-cudd.api)
+(in-package :cl-cudd.baseapi)
 
 (defun cudd-bdd-not (manager node)
   (declare (ignore manager))

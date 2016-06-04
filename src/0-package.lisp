@@ -8,7 +8,7 @@
    "Package containing utility functions for SWIG cffi interface generation")
   (:export #:swig-lispify #:defanonenum))
 
-(defpackage cl-cudd.api
+(defpackage cl-cudd.baseapi
   (:documentation "Low-level interface")
   (:use :cl :cffi :cl-cudd.swig-macros :alexandria)
   (:shadow #:pi)
@@ -21,7 +21,7 @@
 
 (defpackage cl-cudd
   (:documentation "High-level interface")
-  (:use :cl :cffi :alexandria :cl-cudd.swig-macros :cl-cudd.api)
+  (:use :cl :cffi :alexandria :cl-cudd.swig-macros :cl-cudd.baseapi)
   (:nicknames :cudd)
   (:export 
    #:+AGREEMENT+

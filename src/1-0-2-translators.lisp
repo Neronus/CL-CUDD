@@ -1,5 +1,5 @@
 
-(in-package :cl-cudd.api)
+(in-package :cl-cudd.baseapi)
 
 (defctype node :pointer
   "A DD-node returned by CUDD")

@@ -1,4 +1,4 @@
-(in-package :cl-cudd.api)
+(in-package :cl-cudd.baseapi)
 
 (define-condition cudd-condition (condition) ())
 (define-condition cudd-error (cudd-condition error) ())
