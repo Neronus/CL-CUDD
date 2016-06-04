@@ -1,4 +1,5 @@
 (in-package cudd)
+
 (defun node-index (node)
   (cudd-node-read-index (node-pointer node)))
 
@@ -142,8 +143,16 @@ instead of having a complement pointer to 1."))
   "Given a permutation in sequence permut, creates a new DD with
   permuted variables. There should be an entry in array permut for
   each variable in the manager. The i-th entry of permut holds the
-  index of the variable that is to substitute the i-th variable.")
+  index of the variable that is to substitute the i-th variable.
 
+For example, (2 0 1) results in a mapping
+
+ 0  1  2
+---------
+ 2  0  1
+
+and CUDD performs iterative swaps between variables in order to achieve the specified results.
+")
 
 ;;; If the permutation is given as any kind of sequence (this
 ;;; is what we actually expect), then we first turn the sequence
