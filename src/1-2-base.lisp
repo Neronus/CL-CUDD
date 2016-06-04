@@ -97,8 +97,8 @@ instead of having a complement pointer to 1."
 Warning: Undefined behaviour if DD is not a leaf node"
   (declare (ignore manager))
   (foreign-slot-value
-   (foreign-slot-pointer (cudd-regular node) 'dd-node 'type)
-   'dd-node-type 'value))
+   (foreign-slot-pointer (cudd-regular node) '(:struct dd-node) 'type)
+   '(:union dd-node-type) 'value))
 
 (defun cudd-node-get-then (manager node)
   "Return the then-child of an inner node.
@@ -108,9 +108,9 @@ Warning: Undefined behaviour if DD is a leaf node"
   (let ((result
          (foreign-slot-value
           (foreign-slot-value
-           (foreign-slot-pointer (cudd-regular node) 'dd-node 'type)
-           'dd-node-type 'kids)
-          'dd-children 'T)))
+           (foreign-slot-pointer (cudd-regular node) '(:struct dd-node) 'type)
+           '(:union dd-node-type) 'kids)
+          '(:struct dd-children) 'T)))
     (cudd-ref result)
     result))
 
@@ -122,16 +122,16 @@ Warning: Undefined behaviour if DD is a leaf node"
   (let ((result
          (foreign-slot-value
           (foreign-slot-value
-           (foreign-slot-pointer (cudd-regular node) 'dd-node 'type)
-           'dd-node-type 'kids)
-          'dd-children 'E)))
+           (foreign-slot-pointer (cudd-regular node) '(:struct dd-node) 'type)
+           '(:union dd-node-type) 'kids)
+          '(:struct dd-children) 'E)))
     (cudd-ref result)
     result))
 
 (defun cudd-node-get-ref-count (manager node)
   "Return the reference count of the node."
   (declare (ignore manager))
-  (foreign-slot-value (cudd-regular node) 'dd-node 'ref))
+  (foreign-slot-value (cudd-regular node) '(:struct dd-node) 'ref))
 
 
 
