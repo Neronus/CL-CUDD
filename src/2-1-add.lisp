@@ -1,6 +1,55 @@
+;;;  Algebraic Decision Diagrams specific codes
+
 (in-package cudd)
 
-;;;_. Functions for add-apply
+(def-cudd-call add-apply ((:add cudd-add-apply) op (f :node) (g :node))
+  :generic "Applies op to the corresponding discriminants of f and g.
+
+The following operations are supported:
+
++plus+ - Integer and floating point addition
++times+ - Integer and floating point multiplication.
++threshold+ - Threshold operator for Apply (f if f >=g; 0 if f<g)
++set-NZ+ - This operator sets f to the value of g wherever g != 0.
++divide+ - Integer and floating point division.
++minus+ - Integer and floating point substraction.
++minimum+ - Integer and floating point minimum.
++maximum+ - Integer and floating point maximum.
++one-zero-maximum+ - 1 if f > g and 0 otherwise.
++diff+ - Returns NULL if not a terminal case; f op g otherwise, where f op g is plusinfinity if f=g; min(f,g) if f!=g.
++agreement+ - op g,  where f op g is f if f==g; background if f!=g.
++or+ - Disjunction of two 0-1 ADDs.
++nand+ - NAND of two 0-1 ADDs.
++nor+ - NOR of two 0-1 ADDs.
++xor+ - XOR of two 0-1 ADDs.
++xnor+ - XNOR of two 0-1 ADDs.
++equals+ - f op g, where f op g is 1 if f==g, 0 otherwise
++not-equals+ - f op g, where f op g is 1 if f!=g; 0 otherwise
++greater-than+ - f > g, where f op g is 1 if f!=g; 0 otherwise
++greater-than-equals+ -  if f >= g, 0 otherwise
++less-than+ -  < g, where f op g is 1 if f!=g; 0 otherwise
++less-than-equals+ -  <= g, where f op g is 1 if f!=g; 0 otherwise
++pow+ - f to the power of g
++mod+ - f modulo g
++log-x-y+ - log f base g"
+  op)
+
+(def-cudd-call add-negate ((:add cudd-add-negate) (node :node))
+  :generic "Computes the additive inverse of an ADD.")
+
+(def-cudd-call add-constant ((:add cudd-add-const) value)
+  :generic "Retrieves the ADD for constant c if it already exists, or creates a new ADD.")
+
+(def-cudd-call plus-infinity ((:add cudd-read-plus-infinity))
+  :generic
+  "Return node with value infinity.")
+
+(def-cudd-call minus-infinity ((:add cudd-read-minus-infinity))
+  :generic
+  "Return node with value -infinity.")
+
+
+;;; Functions for add-apply
 (defparameter +plus+ (cffi:foreign-symbol-pointer "Cudd_addPlus")
   "Integer and floating point addition")
 (defparameter +times+ (cffi:foreign-symbol-pointer "Cudd_addTimes")
