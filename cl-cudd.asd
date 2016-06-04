@@ -9,9 +9,17 @@
  :depends-on (:cffi :alexandria :trivial-garbage :cl-cudd.build)
  :serial t
  :components ((:file "src/0-package")
-              (:file "src/1-cuddapi")
-              (:file "src/2-cudd")
-              (:file "src/3-add-apply-functions"))
+              (:file "src/1-0-0-library")
+              (:file "src/1-0-1-conditions")
+              (:file "src/1-0-2-translators")
+              (:file "src/1-1-swig")
+              (:file "src/1-2-base")
+              (:file "src/1-3-dddmp")
+              (:file "src/2-0-base")
+              (:file "src/2-1-add-bdd-bridge")
+              (:file "src/2-1-add")
+              (:file "src/2-1-common")
+              (:file "src/2-1-system"))
  :description "A two-layered binding to the CUDD binary decision diagram library.
 
 See README.md for more details.")
