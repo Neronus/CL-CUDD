@@ -136,11 +136,6 @@
 (cffi:define-foreign-library libcudd
   (t (:default "libcudd")))
 
-(let ((libdir "/opt/local/lib/cudd/"))
-  (when (probe-file libdir)
-    (pushnew libdir cffi:*foreign-library-directories* :test #'string=)))
-                
-
 (cffi:use-foreign-library libcudd)
 
 (eval-when (:compile-toplevel :load-toplevel)

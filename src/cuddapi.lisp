@@ -157,18 +157,13 @@
 (cffi:define-foreign-library libcudd
   (t (:default "libcudd")))
 
-(let ((libdir "/opt/local/lib/cudd/"))
-  (when (probe-file libdir)
-    (pushnew libdir cffi:*foreign-library-directories* :test #'string=)))
-                
-
 (cffi:use-foreign-library libcudd)
 
 (eval-when (:compile-toplevel :load-toplevel)
   ;; Muffle compiler-notes globally
   #+sbcl (declaim (sb-ext:muffle-conditions sb-ext:defconstant-uneql))
 
-    
+  
 ;;; should we be checking this against the binary, and rejecting if we have a
 ;;; version mismatch? Or should we just be pulling this from the binary?
 ;;; [2014/06/12:rpg]

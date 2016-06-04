@@ -6,7 +6,8 @@
   :license "BSD Style (see LICENSE)"
   :depends-on (:cffi
                :alexandria
-               :trivial-garbage)
+               :trivial-garbage
+               :cl-cudd.build)
   :pathname "src/"
   :components ((:file "package")
                (:file "cuddapi" :depends-on ("package"))
