@@ -7,6 +7,7 @@
   :depends-on (:cffi
                :alexandria
                :trivial-garbage)
+  :pathname "src/"
   :components ((:file "package")
                (:file "cuddapi" :depends-on ("package"))
                (:file "add-apply-functions" :depends-on ("package"))
