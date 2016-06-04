@@ -15,16 +15,14 @@
   :bdd     "Conjunction of two BDDs.")
 
 
-(defgeneric node-equal (a b)
-  (:documentation
-   "Return true iff A and B are the same graph.
+(defun node-equal (a b)
+  "Return true iff A and B are the same graph.
 
 Because CUDD caches all diagrams, this is true if and
-only if their pointers are the same."))
-
-(defmethod node-equal ((a node) (b node))
+only if their pointers are the same."
+  (check-type a node)
+  (check-type b node)
   (cffi:pointer-eq (node-pointer a) (node-pointer b)))
-
 
 (def-cudd-call node-complement ((:add cudd-add-cmpl :bdd cudd-bdd-not) (node :node))
   :generic "Computes the complement of a node a la C language:
