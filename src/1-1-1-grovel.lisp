@@ -96,17 +96,4 @@
        ((#.(lispify "CUDD_VAR_PRESENT_STATE" :enumvalue :keyword) "CUDD_VAR_PRESENT_STATE"))
        ((#.(lispify "CUDD_VAR_NEXT_STATE" :enumvalue :keyword) "CUDD_VAR_NEXT_STATE")))
 
-(cstruct #.(lispify "DdChildren" :classname)
-         (T "T")
-         (E "E"))
-
-(cstruct #.(lispify "DdNode" :classname)
-         (#.(lispify "index" :slotname) "index")
-         (#.(lispify "ref" :slotname) "ref")
-         (#.(lispify "next" :slotname) "next" :type node)
-         (#.(lispify "type" :slotname) "type"))
-
-(cunion #.(lispify "DdNode_type" :classname)
-        (#.(lispify "value" :slotname) "value")
-        (#.(lispify "kids" :slotname) "kids" :type #.(lispify "DdChildren" :classname)))
 

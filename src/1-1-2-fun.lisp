@@ -1,5 +1,19 @@
 (in-package :cl-cudd.baseapi)
 
+(defcstruct #.(lispify "DdChildren" 'classname)
+            (t :pointer)
+            (e :pointer))
+
+(defcstruct #.(lispify "DdNode" 'classname)
+            (index :unsigned-short)
+            (ref :unsigned-short)
+            (next node)
+            (type :pointer))
+
+(defcunion #.(lispify "DdNode_type" 'classname)
+           (value :double)
+           (kids (:struct dd-children)))
+
 (defcfun ("Cudd_addNewVar" #.(lispify "Cudd_addNewVar" :function)) node
   (dd manager))
 (defcfun ("Cudd_addNewVarAtLevel" #.(lispify "Cudd_addNewVarAtLevel" :function)) node
