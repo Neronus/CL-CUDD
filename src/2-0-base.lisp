@@ -126,7 +126,7 @@ is not a null pointer."
          (when (zerop (cudd-node-get-ref-count (manager-pointer manager) pointer))
            (error "Tried to decrease reference count of node that already
 has refcount zero"))
-         (cl-cudd.api:cudd-recursive-deref
+         (cudd-recursive-deref
           (manager-pointer manager) pointer))))))
 
 (defun wrap-and-finalize (pointer type)
