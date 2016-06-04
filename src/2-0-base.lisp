@@ -124,8 +124,7 @@ is not a null pointer."
        (declare (ignore rest))
        (when (not (null-pointer-p (manager-pointer manager)))
          (when (zerop (cudd-node-get-ref-count (manager-pointer manager) pointer))
-           (error "Tried to decrease reference count of node that already
-has refcount zero"))
+           (error "Tried to decrease reference count of node that already has refcount zero"))
          (cudd-recursive-deref
           (manager-pointer manager) pointer))))))
 
