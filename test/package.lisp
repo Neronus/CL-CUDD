@@ -12,22 +12,32 @@
 (defvar *models* (directory (merge-pathnames "*.tests" (asdf:system-relative-pathname :cl-cudd "test/"))))
 
 (defun parse-bdd (path)
+  (fresh-line)
   (with-manager ()
-    (let ((bdd (one-node 'bdd-node)))
-      (iter (for line in-file path using #'read-line)
-            (iter (for c in-vector line)
-                  (for index from (1- (length line)) downto 0)
-                  (setf bdd (node-and bdd
-                                      (ecase c
-                                        (#\0 (make-var 'bdd-node :nr index))
-                                        (#\1 (node-complement (make-var 'bdd-node :nr index))))))))
-      (print bdd)
-      (cl-cudd.baseapi:dump-dot
-       ;; *manager*
-       ;; bdd
-       (manager-pointer *manager*)
-       (node-pointer bdd)
-       (namestring (make-pathname :type "dot" :defaults path))))))
+    (iter (with f = (one-node 'bdd-node))
+          (print f)
+          (for line in-file path using #'read-line)
+          (princ line) (fresh-line)
+          (iter (with g = (one-node 'bdd-node))
+                (for c in-vector line)
+                (for index from (1- (length line)) downto 0)
+                (for h = (ecase c
+                           (#\0 (node-complement
+                                 (make-var 'bdd-node :level index)))
+                           (#\1 (make-var 'bdd-node :level index))))
+                (print h)
+                (setf g (node-and g h))
+                (print g)
+                (finally
+                 (setf f (node-or f g))))
+          (print f)
+          (finally
+           (cl-cudd.baseapi:dump-dot
+            ;; *manager*
+            ;; bdd
+            (manager-pointer *manager*)
+            (node-pointer f)
+            (namestring (make-pathname :type "dot" :defaults path)))))))
 
 (test bdd
   (dolist (m *models*)
