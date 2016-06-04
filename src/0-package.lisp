@@ -6,7 +6,7 @@
   (:use :cl :cffi)
   (:documentation
    "Package containing utility functions for SWIG cffi interface generation")
-  (:export #:swig-lispify #:defanonenum))
+  (:export #:lispify))
 
 (defpackage cl-cudd.baseapi
   (:documentation "Low-level interface")
