@@ -22,4 +22,5 @@
               (:file "src/2-1-system"))
  :description "A two-layered binding to the CUDD binary decision diagram library.
 
-See README.md for more details.")
+See README.md for more details."
+ :in-order-to ((test-op (test-op cl-cudd.test))))
