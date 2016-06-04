@@ -80,7 +80,7 @@ instead of having a complement pointer to 1."
     (make-pointer addr)))
 
 (defparameter +cudd-max-index+
-              (if (and (= sizeof-void-p 8) (= sizeof-int 4))
+              (if (and (= +sizeof-void-p+ 8) (= +sizeof-int+ 4))
                   ;; ((unsigned int) ~0) >> 1
                   (- (expt 2 31) 1)
                   ;; ((unsigned short) ~0)
