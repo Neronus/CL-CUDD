@@ -5,7 +5,7 @@
 
 Every function in this package works with this manager.")
 
-;;;_ Manager
+;;; Manager
 (defclass manager ()
   ((pointer :type cffi:foreign-pointer
             :initarg :pointer
@@ -31,7 +31,7 @@ Every function in this package works with this manager.")
        (cudd-quit (manager-pointer *manager*))
        (setf (manager-pointer *manager*) (cffi:null-pointer)))))
 
-;;;_ Wrapped CUDD node
+;;;  Wrapped CUDD node
 (defclass node ()
   ((pointer :type cffi:foreign-pointer
             :initarg :pointer
@@ -50,9 +50,9 @@ Every function in this package works with this manager.")
 Takes care that the nodes stay alive during the body.
 
 Example:
-(with-pointers ((f-ptr f)
-                (g-ptr g))
-  (cudd-add-apply +or+ f-ptr g-ptr))
+ (with-pointers ((f-ptr f)
+                 (g-ptr g))
+   (cudd-add-apply +or+ f-ptr g-ptr))
 
 This is implemented by increasing the reference count of
 every node in the body and decreasing it after the body is run"
@@ -260,7 +260,7 @@ only if garbage collection has been explicitly disabled."
 that the DdNode pointer bck is already referenced."
   :dont-wrap-result t)
 
-;;;_ Algebraic Decision Diagrams
+;;;  Algebraic Decision Diagrams
 
 (defun node-index (node)
   (cudd-node-read-index (node-pointer node)))
@@ -558,7 +558,7 @@ If abstracting an ADD, we assume that it is an 0-1-ADD")
 
 
 
-;;;_ Binary decision Diagrams
+;;;  Binary decision Diagrams
 (defun bdd->add (bdd)
   "Converts a BDD to a 0-1 ADD"
   (assert (typep bdd 'bdd-node))
@@ -574,7 +574,7 @@ If abstracting an ADD, we assume that it is an 0-1-ADD")
    'bdd-node))
 
 
-;;;_ Common for ADD and BDD
+;;;  Common for ADD and BDD
 (def-cudd-call cofactor ((:add cudd-cofactor :bdd cudd-cofactor) (f :node) (g :node))
   :generic "Computes the cofactor of f with respect to g; g must be the BDD or the ADD of a cube.")
 
