@@ -158,11 +158,11 @@ and CUDD performs iterative swaps between variables in order to achieve the spec
 ;;; is what we actually expect), then we first turn the sequence
 ;;; into an array and then call the actual implementation
 (defmethod node-permute :around (node (permutation sequence))
-  (with-foreign-object (array :pointer (length permutation))
-    (loop :for node :being :each :element :of permutation
-          :for i    :from  0
-          :do (setf (mem-aref array :pointer i) (node-pointer node)))
-    (node-permute node array)))
+  (let ((len (length permutation)))
+    (with-foreign-object (array :pointer len)
+      (loop :for i :from  0 :below (length permutation)
+            :do (setf (mem-aref array :pointer i) (node-pointer (elt permutation i))))
+      (node-permute node array))))
 
 (defun add-swap-variables (mgr node x y)
   (assert (= (length x) (length y)))
@@ -207,11 +207,11 @@ If abstracting an ADD, we assume that it is an 0-1-ADD
 
 If abstracting an ADD, we assume that it is an 0-1-ADD")
 
-(def-cudd-call zero-node ((:common (lambda (dd type)
-                                     (wrap-and-finalize
-                                      (cudd-read-zero dd)
-                                      type))) type)
-  :generic "Return the zero node."
+(def-cudd-call zero-node ((:add (lambda (dd type) (wrap-and-finalize (cudd-read-zero dd) type))
+                           :bdd (lambda (dd type) (wrap-and-finalize (cudd-read-logic-zero dd) type)))
+                          type)
+  :add "Return the arithmetic zero node (0.0d0)."
+  :bdd "Return the logical zero node (boolean 0)."
   :dont-wrap-result t)
 
 (def-cudd-call one-node ((:common (lambda (dd type)

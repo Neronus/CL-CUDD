@@ -6,13 +6,16 @@
  :serial t
  :author "Christian von Essen <christian@mvonessen.de>"
  :license "BSD Style (see LICENSE)"
+ :defsystem-depends-on (:cffi-grovel)
  :depends-on (:cffi :alexandria :trivial-garbage :cl-cudd.build)
  :serial t
  :components ((:file "src/0-package")
               (:file "src/1-0-0-library")
               (:file "src/1-0-1-conditions")
               (:file "src/1-0-2-translators")
-              (:file "src/1-1-swig")
+              (:file "src/1-1-0-swig-macros")
+              (:cffi-grovel-file "src/1-1-1-grovel")
+              (:file "src/1-1-2-fun")
               (:file "src/1-2-base")
               (:file "src/1-3-dddmp")
               (:file "src/2-0-base")

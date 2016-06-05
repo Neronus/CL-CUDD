@@ -34,7 +34,7 @@ Every function in this package works with this manager.")
 
 ;;; Wrapped CUDD node
 (defclass node ()
-  ((pointer :type cffi:foreign-pointer
+  ((pointer :type foreign-pointer
             :initarg :pointer
             :initform (error "NODE needs to wrap a pointer")
             :reader node-pointer))
@@ -52,8 +52,9 @@ Example:
 
 This is implemented by increasing the reference count of
 every node in the body and decreasing it after the body is run"
-  (let ((manager (gensym "manager")))
+  (let ((manager (gensym "MANAGER")))
     `(let* ((,manager (manager-pointer *manager*)))
+       (declare (ignorable ,manager))
        (progn
          ;; Reference all pointers
          ;; Effectively, we call node-pointer twice on every wrapper.

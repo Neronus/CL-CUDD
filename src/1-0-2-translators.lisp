@@ -1,10 +1,8 @@
 
 (in-package :cl-cudd.baseapi)
 
-(defctype node :pointer
-  "A DD-node returned by CUDD")
-(defctype manager :pointer
-  "A manager of CUDD")
+(defctype node :pointer "A DD-node returned by CUDD")
+(defctype manager :pointer "A manager of CUDD")
 
 (define-foreign-type node-type ()
   ()
