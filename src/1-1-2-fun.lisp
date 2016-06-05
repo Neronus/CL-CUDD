@@ -1,18 +1,42 @@
 (in-package :cl-cudd.baseapi)
 
-(defcstruct #.(lispify "DdChildren" 'classname)
+(defcstruct #.(lispify "DdChildren" :classname)
             (t node)
             (e node))
 
-(defcunion #.(lispify "DdNode_type" 'classname)
+(defcunion #.(lispify "DdNode_type" :classname)
            (value cudd-value-type)
            (kids (:struct dd-children)))
 
-(defcstruct #.(lispify "DdNode" 'classname)
+(defcstruct #.(lispify "DdNode" :classname)
             (index dd-half-word)
             (ref dd-half-word)
             (next node)
-            (type dd-node-type))
+            (type (:union dd-node-type)))
+
+(defcstruct ddgen-gen-cubes
+  (cube (:pointer :int))
+  (value cudd-value-type))
+(defcstruct ddgen-gen-primes
+  (cube (:pointer :int))
+  (ub node))
+(defcstruct ddgen-gen-nodes
+  (size :int))
+(defcstruct ddgen-stack
+  (sp :int)
+  (stack (:pointer node)))
+(defcunion ddgen-gen
+  (cubes  (:struct ddgen-gen-cubes))
+  (primes (:struct ddgen-gen-primes))
+  (nodes  (:struct ddgen-gen-nodes)))
+
+(defcstruct #.(lispify "DdGen" :classname)
+            (manager manager)
+            (type :int)
+            (status :int)
+            (gen (:union ddgen-gen))
+            (stack (:struct ddgen-stack))
+            (node node))
 
 (defcfun ("Cudd_addNewVar" #.(lispify "Cudd_addNewVar" :function)) node
   (dd manager))
@@ -1302,22 +1326,22 @@
   (nvars :int)
   (maskVars :pointer)
   (mvars :int))
-(defcfun ("Cudd_FirstCube" #.(lispify "Cudd_FirstCube" :function)) :pointer
+(defcfun ("Cudd_FirstCube" #.(lispify "Cudd_FirstCube" :function)) (:pointer (:struct dd-gen))
   (dd manager)
   (f node)
   (cube :pointer)
   (value :pointer))
 (defcfun ("Cudd_NextCube" #.(lispify "Cudd_NextCube" :function)) :int
-  (gen :pointer)
+  (gen (:pointer (:struct dd-gen)))
   (cube :pointer)
   (value :pointer))
-(defcfun ("Cudd_FirstPrime" #.(lispify "Cudd_FirstPrime" :function)) :pointer
+(defcfun ("Cudd_FirstPrime" #.(lispify "Cudd_FirstPrime" :function)) (:pointer (:struct dd-gen))
   (dd manager)
   (l node)
   (u node)
   (cube :pointer))
 (defcfun ("Cudd_NextPrime" #.(lispify "Cudd_NextPrime" :function)) :int
-  (gen :pointer)
+  (gen (:pointer (:struct dd-gen)))
   (cube :pointer))
 (defcfun ("Cudd_bddComputeCube" #.(lispify "Cudd_bddComputeCube" :function)) node
   (dd manager)
@@ -1336,17 +1360,17 @@
   (dd manager)
   (cube node)
   (array :pointer))
-(defcfun ("Cudd_FirstNode" #.(lispify "Cudd_FirstNode" :function)) :pointer
+(defcfun ("Cudd_FirstNode" #.(lispify "Cudd_FirstNode" :function)) (:pointer (:struct dd-gen))
   (dd manager)
   (f node)
   (node :pointer))
 (defcfun ("Cudd_NextNode" #.(lispify "Cudd_NextNode" :function)) :int
-  (gen :pointer)
+  (gen (:pointer (:struct dd-gen)))
   (node :pointer))
 (defcfun ("Cudd_GenFree" #.(lispify "Cudd_GenFree" :function)) :int
-  (gen :pointer))
+  (gen (:pointer (:struct dd-gen))))
 (defcfun ("Cudd_IsGenEmpty" #.(lispify "Cudd_IsGenEmpty" :function)) :int
-  (gen :pointer))
+  (gen (:pointer (:struct dd-gen))))
 (defcfun ("Cudd_IndicesToCube" #.(lispify "Cudd_IndicesToCube" :function)) node
   (dd manager)
   (array :pointer)
@@ -1483,12 +1507,12 @@
   (f node)
   (n :int)
   (pr :int))
-(defcfun ("Cudd_zddFirstPath" #.(lispify "Cudd_zddFirstPath" :function)) :pointer
+(defcfun ("Cudd_zddFirstPath" #.(lispify "Cudd_zddFirstPath" :function)) (:pointer (:struct dd-gen))
   (zdd manager)
   (f node)
   (path :pointer))
 (defcfun ("Cudd_zddNextPath" #.(lispify "Cudd_zddNextPath" :function)) :int
-  (gen :pointer)
+  (gen (:pointer (:struct dd-gen)))
   (path :pointer))
 (defcfun ("Cudd_zddCoverPathToString" #.(lispify "Cudd_zddCoverPathToString" :function)) :string
   (zdd manager)

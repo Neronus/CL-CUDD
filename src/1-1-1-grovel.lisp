@@ -11,6 +11,8 @@
 
 (in-package :cl-cudd.baseapi)
 
+;; note: DdManager and DdNode cannot be grovelled due to NULL checking.
+;; See 1-0-2-translators.lisp
 
 ;; #include <stdlib.h>
 (include "stdio.h")
