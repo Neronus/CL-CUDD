@@ -5,8 +5,8 @@
             (e :pointer))
 
 (defcstruct #.(lispify "DdNode" 'classname)
-            (index :unsigned-short)
-            (ref :unsigned-short)
+            (index dd-half-word)
+            (ref dd-half-word)
             (next node)
             (type :pointer))
 

@@ -23,6 +23,9 @@
 (cc-flags #.(format nil "-I~A" (asdf:system-relative-pathname :cl-cudd "cudd-3.0.0/")))
 (include "config.h")
 (include "cudd/cudd.h")
+(include "cudd/cuddInt.h")
+
+(ctype #.(lispify "DdHalfWord" :type) "DdHalfWord")
 
 (constant (#.(lispify "CUDD_VERSION" :constant) "CUDD_VERSION"))
 (constant (#.(lispify "SIZEOF_VOID_P" :constant) "SIZEOF_VOID_P"))
