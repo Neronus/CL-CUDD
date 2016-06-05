@@ -11,7 +11,7 @@
 (in-suite :cl-cudd)
 
 (defun models ()
-  (directory (merge-pathnames "*.tests" (asdf:system-relative-pathname :cl-cudd "test/"))))
+  (directory (merge-pathnames "*.tests" (asdf:system-relative-pathname :cl-cudd "test/modest/"))))
 
 (defun parse-bdd (path)
   (fresh-line)
@@ -49,7 +49,7 @@
   (dolist (m (models))
     (finishes
       (parse-bdd m)))
-  (uiop:run-program (format nil "make -C ~a" (asdf:system-relative-pathname :cl-cudd "test/"))
+  (uiop:run-program (format nil "make -C ~a" (asdf:system-relative-pathname :cl-cudd "test/modest/"))
                     :ignore-error-status t
                     :output t
                     :error-output t))
