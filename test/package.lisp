@@ -10,8 +10,8 @@
 (def-suite :cl-cudd)
 (in-suite :cl-cudd)
 
-(defun models ()
-  (directory (merge-pathnames "*.tests" (asdf:system-relative-pathname :cl-cudd "test/modest/"))))
+(defun models (kind)
+  (directory (merge-pathnames "*.tests" (asdf:system-relative-pathname :cl-cudd (format nil "test/~a/" kind)))))
 
 (defun parse-bdd (path)
   (fresh-line)
@@ -46,10 +46,19 @@
                    (bdd->add f)))))))
 
 (test bdd
-  (dolist (m (models))
+  (dolist (m (models "gates"))
     (finishes
       (parse-bdd m)))
-  (uiop:run-program (format nil "make -C ~a" (asdf:system-relative-pathname :cl-cudd "test/modest/"))
+  (uiop:run-program (format nil "make -C ~a" (asdf:system-relative-pathname :cl-cudd "test/gates/"))
                     :ignore-error-status t
                     :output t
                     :error-output t))
+
+(test reordering
+  ;; swap
+
+  ;; permutation
+
+  ;; dynamic reordering
+  )
+
