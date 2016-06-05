@@ -2,7 +2,8 @@
 (in-package :cl-user)
 
 (defpackage cl-cudd.test
-  (:use :cl :cl-cudd :fiveam :iterate))
+  (:use :cl :cl-cudd :cl-cudd.baseapi :fiveam :iterate)
+  (:shadow :next))
 
 (in-package cl-cudd.test)
 
