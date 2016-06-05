@@ -1,18 +1,18 @@
 (in-package :cl-cudd.baseapi)
 
 (defcstruct #.(lispify "DdChildren" 'classname)
-            (t :pointer)
-            (e :pointer))
+            (t node)
+            (e node))
+
+(defcunion #.(lispify "DdNode_type" 'classname)
+           (value cudd-value-type)
+           (kids (:struct dd-children)))
 
 (defcstruct #.(lispify "DdNode" 'classname)
             (index dd-half-word)
             (ref dd-half-word)
             (next node)
-            (type :pointer))
-
-(defcunion #.(lispify "DdNode_type" 'classname)
-           (value :double)
-           (kids (:struct dd-children)))
+            (type dd-node-type))
 
 (defcfun ("Cudd_addNewVar" #.(lispify "Cudd_addNewVar" :function)) node
   (dd manager))

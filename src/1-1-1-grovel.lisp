@@ -26,6 +26,7 @@
 (include "cudd/cuddInt.h")
 
 (ctype #.(lispify "DdHalfWord" :type) "DdHalfWord")
+(ctype #.(lispify "CUDD_VALUE_TYPE" :type) "CUDD_VALUE_TYPE")
 
 (constant (#.(lispify "CUDD_VERSION" :constant) "CUDD_VERSION"))
 (constant (#.(lispify "SIZEOF_VOID_P" :constant) "SIZEOF_VOID_P"))
