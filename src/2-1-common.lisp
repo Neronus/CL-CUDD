@@ -207,11 +207,11 @@ If abstracting an ADD, we assume that it is an 0-1-ADD
 
 If abstracting an ADD, we assume that it is an 0-1-ADD")
 
-(def-cudd-call zero-node ((:common (lambda (dd type)
-                                     (wrap-and-finalize
-                                      (cudd-read-zero dd)
-                                      type))) type)
-  :generic "Return the zero node."
+(def-cudd-call zero-node ((:add (lambda (dd type) (wrap-and-finalize (cudd-read-zero dd) type))
+                           :bdd (lambda (dd type) (wrap-and-finalize (cudd-read-logic-zero dd) type)))
+                          type)
+  :add "Return the arithmetic zero node (0.0d0)."
+  :bdd "Return the logical zero node (boolean 0)."
   :dont-wrap-result t)
 
 (def-cudd-call one-node ((:common (lambda (dd type)
