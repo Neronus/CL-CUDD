@@ -37,7 +37,13 @@
                   (finally
                    (setf f (node-or f g))))
             (print f)
-            (finally (dump (pathname-name path) f))))))
+            ;; (finish)
+            (finally
+             (dump (pathname-name path) f)
+             ;; since BDDs may contain complemented edges, it is slightly hard to understand.
+             ;; Usually converting it into ADDs will improve the output
+             (dump (format nil "~a-as-ADD" (pathname-name path))
+                   (bdd->add f)))))))
 
 (test bdd
   (dolist (m (models))
