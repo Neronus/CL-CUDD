@@ -1,6 +1,9 @@
 
-all:
-	for d in *.dot ; do dot $$d -Tpng -o $$d.png ; done
+format = pdf
+all: $(addsuffix .$(format),$(basename $(wildcard *.dot)))
+
+%.$(format): %.dot
+	dot $< -Tpdf -o $@
 
 clean:
-	rm *dot*
+	-rm *dot* *.$(format) *.pdf
