@@ -55,14 +55,14 @@ in the list of nodes: ADD-NODE or BDD-NODE"))
 (defmethod cube (nodes (type (eql 'nil)))
   (cube nodes (type-of (first nodes))))
 
-(defgeneric make-var (type &key level nr)
+(defgeneric make-var (type &key level index)
   (:documentation
-   "Creates a new DD variable. At most one of nr and level may be given.
+   "Creates a new DD variable. At most one of index and level may be given.
 
-If neither nr nor level are given, then the new variable has an index equal
+If neither index nor level are given, then the new variable has an index equal
 to the largest previous index plus 1.
 
-If nr is given, then retrieves the DD variable with index nr if it already exists,
+If index is given, then retrieves the DD variable with the index if it already exists,
 or creates a new DD variable
 
 If level is given, then the new variable has an index equal to the largest
@@ -74,14 +74,14 @@ invokes a signal otherwise.
 An ADD variable differs from a BDD variable because it points to the arithmetic zero,
 instead of having a complement pointer to 1."))
 
-(defmethod make-var ((type (eql 'add-node)) &key level nr)
+(defmethod make-var ((type (eql 'add-node)) &key level index)
   (wrap-and-finalize
-   (add-var (manager-pointer *manager*) :nr nr :level level)
+   (add-var (manager-pointer *manager*) :index index :level level)
    'add-node))
 
-(defmethod make-var ((type (eql 'bdd-node)) &key level nr)
+(defmethod make-var ((type (eql 'bdd-node)) &key level index)
   (wrap-and-finalize
-   (bdd-var (manager-pointer *manager*) :nr nr :level level)
+   (bdd-var (manager-pointer *manager*) :index index :level level)
    'bdd-node))
 
 (def-cudd-call node-constant-p ((:common cudd-node-is-constant) (node :node))

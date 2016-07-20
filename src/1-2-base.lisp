@@ -26,13 +26,13 @@
             :do (setf (mem-aref array :pointer i) v))
       (cudd-bdd-compute-cube manager array (null-pointer) n))))
 
-(defun add-var (manager &key nr level)
-  "Creates a new ADD variable. At most one of nr and level may be given.
+(defun add-var (manager &key index level)
+  "Creates a new ADD variable. At most one of index and level may be given.
 
-If neither nr nor level are given, then the new variable has an index equal
+If neither index nor level are given, then the new variable has an index equal
 to the largest previous index plus 1.
 
-If nr is given, then retrieves the ADD variable with index nr if it already exists,
+If index is given, then retrieves the ADD variable with the index if it already exists,
 or creates a new ADD variable
 
 If level is given, then the new variable has an index equal to the largest
@@ -43,20 +43,20 @@ invokes a signal otherwise.
 
 An ADD variable differs from a BDD variable because it points to the arithmetic zero,
 instead of having a complement pointer to 1."
-  (when (and nr level)
+  (when (and index level)
     (error "ADD-VAR accepts at most one of I and LEVEL"))
   (cond
-    (nr (cudd-add-ith-var manager nr))
+    (index (cudd-add-ith-var manager index))
     (level (cudd-add-new-var-at-level manager level))
     (t (cudd-add-new-var manager))))
 
-(defun bdd-var (manager &key nr level)
-  "Creates a new BDD variable. At most one of nr and level may be given.
+(defun bdd-var (manager &key index level)
+  "Creates a new BDD variable. At most one of index and level may be given.
 
-If neither nr nor level are given, then the new variable has an index equal
+If neither index nor level are given, then the new variable has an index equal
 to the largest previous index plus 1.
 
-If nr is given, then retrieves the BDD variable with index nr if it already exists,
+If index is given, then retrieves the BDD variable with the index if it already exists,
 or creates a new BDD variable
 
 If level is given, then the new variable has an index equal to the largest
@@ -67,10 +67,10 @@ invokes a signal otherwise.
 
 An ADD variable differs from a BDD variable because it points to the arithmetic zero,
 instead of having a complement pointer to 1."
-  (when (and nr level)
+  (when (and index level)
     (error "BDD-VAR accepts at most one of I and LEVEL"))
   (cond
-    (nr (cudd-bdd-ith-var manager nr))
+    (index (cudd-bdd-ith-var manager index))
     (level (cudd-bdd-new-var-at-level manager level))
     (t (cudd-bdd-new-var manager))))
 
