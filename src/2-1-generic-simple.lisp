@@ -1,5 +1,8 @@
 (in-package :cudd)
 
+;; high-level APIs that require CLOS-based dispatching for bdds and adds
+;; This file contains only the simple operators
+
 (def-cudd-call node-or ((:add (lambda (mgr f g) (cudd-add-apply mgr +or+ f g))
                          :bdd cudd-bdd-or) (f :node) (g :node))
   :generic "Disjunction of two 0-1 ADDs or two BDDs."

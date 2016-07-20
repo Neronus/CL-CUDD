@@ -1,5 +1,7 @@
 (in-package :cudd)
 
+;; high-level APIs that can be implemented as functions
+
 (defun node-index (node)
   (cudd-node-read-index (node-pointer node)))
 
