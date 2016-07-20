@@ -1,4 +1,4 @@
-(in-package cudd)
+(in-package :cudd)
 
 (defun node-index (node)
   (cudd-node-read-index (node-pointer node)))
@@ -45,7 +45,9 @@ and H being the else branch"
 in the list of nodes: ADD-NODE or BDD-NODE"))
 
 (defmethod cube (nodes (type (eql 'add-node)))
-  (wrap-and-finalize (cudd-add-cube (manager-pointer *manager*) (mapcar #'node-pointer nodes)) 'add-node))
+  (wrap-and-finalize
+   (cudd-add-cube (manager-pointer *manager*) (mapcar #'node-pointer nodes))
+   'add-node))
 
 (defmethod cube (nodes (type (eql 'bdd-node)))
   (wrap-and-finalize

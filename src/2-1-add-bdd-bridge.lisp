@@ -1,4 +1,4 @@
-(in-package cudd)
+(in-package :cudd)
 
 (defun bdd->add (bdd)
   "Converts a BDD to a 0-1 ADD"

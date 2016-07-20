@@ -1,6 +1,6 @@
 ;;;  Algebraic Decision Diagrams specific codes
 
-(in-package cudd)
+(in-package :cudd)
 
 (def-cudd-call add-apply ((:add cudd-add-apply) op (f :node) (g :node))
   :generic "Applies op to the corresponding discriminants of f and g.

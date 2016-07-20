@@ -1,4 +1,4 @@
-(in-package cudd)
+(in-package :cudd)
 
 (def-cudd-call disable-gc ((:common cudd-disable-garbage-collection))
                :generic "Disables garbage collection. Garbage

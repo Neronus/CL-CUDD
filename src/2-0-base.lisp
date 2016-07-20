@@ -1,5 +1,5 @@
 ;;; base class definitions and macros for defining APIs
-(in-package cudd)
+(in-package :cudd)
 
 ;;; Manager
 
