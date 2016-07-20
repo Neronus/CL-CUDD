@@ -25,7 +25,8 @@ only if their pointers are the same."
   (check-type b node)
   (cffi:pointer-eq (node-pointer a) (node-pointer b)))
 
-(def-cudd-call node-complement ((:add cudd-add-cmpl :bdd cudd-bdd-not) (node :node))
+(def-cudd-call node-complement ((:add cudd-add-cmpl :bdd cudd-bdd-not)
+                                (node :node))
   :generic "Computes the complement of a node a la C language:
 The complement of 0 is 1 and the complement of everything else is 0."
   :add "Computes the complement of an ADD a la C language:
@@ -33,7 +34,8 @@ The complement of 0 is 1 and the complement of everything else is 0."
   :bdd "Complements a DD by flipping the complement attribute of the
 pointer (the least significant bit).")
 
-(def-cudd-call if-then-else ((:add cudd-add-ite :bdd cudd-bdd-ite) (f :node) (g :node) (h :node))
+(def-cudd-call if-then-else ((:add cudd-add-ite :bdd cudd-bdd-ite)
+                             (f :node) (g :node) (h :node))
   :generic "Return a new DD-node for with F being the top-node, G being the then-branch
 and H being the else branch"
   :add "Implements ITE(f,g,h). This procedure assumes that f is a 0-1
@@ -86,17 +88,17 @@ instead of having a complement pointer to 1."))
    (bdd-var (manager-pointer *manager*) :index index :level level)
    'bdd-node))
 
-(def-cudd-call node-constant-p ((:common cudd-node-is-constant) (node :node))
-  :generic "Return T if the node is constant, NIL otherwise"
-  :dont-wrap-result t)
+(defun node-constant-p (node)
+  "return t if the node is constant, nil otherwise"
+  (with-pointers ((node node))
+     (cudd-node-is-constant (manager-pointer *manager*) node)))
 
-(def-cudd-call node-value ((:common cudd-node-get-value) (node :node))
-  :dont-wrap-result t
-  :generic "Return the node value of a constant node")
-
-;; Make sure that we only try to read the value of a constant node
-(defmethod node-value :before (node)
-  (assert (node-constant-p node)))
+(defun node-value (node)
+  "Return the node value of a constant node"
+  ;; Make sure that we only try to read the value of a constant node
+  (assert (node-constant-p node))
+  (with-pointers ((node node))
+    (cudd-node-get-value (manager-pointer *manager*) node)))
 
 (def-cudd-call node-then ((:add cudd-node-get-then :bdd cudd-node-get-then) (node :node))
   :generic "Return the then child of an inner node")
