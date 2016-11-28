@@ -1,3 +1,5 @@
+;; DDDMP: tools for visualizing Decision Diagrams
+
 (in-package :cl-cudd.baseapi)
 
 (defcfun "fopen" :pointer (path :string) (mode :string))

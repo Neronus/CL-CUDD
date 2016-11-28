@@ -7,13 +7,14 @@
 
 Every function in this package works with this manager.")
 
+;; TODO: convert to struct
 (defclass manager ()
   ((pointer :type cffi:foreign-pointer
             :initarg :pointer
             :initform (error "MANAGER needs to wrap a pointer")
             :accessor manager-pointer))
   (:documentation
-   "CUDD manager"))
+   "A boxed CUDD manager class"))
 
 (defmacro with-manager ((&key 
                          (initial-num-vars 0)
@@ -39,7 +40,7 @@ Every function in this package works with this manager.")
             :initform (error "NODE needs to wrap a pointer")
             :reader node-pointer))
   (:documentation
-   "Top class of all CUDD nodes."))
+   "A boxed CUDD node class. Top class of all CUDD nodes."))
 
 (defmacro with-pointers (pointers &body body)
   "Create a binding to pointers using a let-like specification.
@@ -67,7 +68,8 @@ every node in the body and decreasing it after the body is run"
          ,@(loop
               :for binding :in pointers
               :unless (and (listp binding) (= (length binding) 2))
-              :do (error "Binding ~A is mal-formed" binding)              
+              :do (error "Binding ~A is mal-formed" binding)
+              ;; increase refcount
               :collect `(cudd-ref (node-pointer ,(cadr binding))))
          (let
              ;; Create bindings

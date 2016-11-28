@@ -1,4 +1,4 @@
-;;; 
+;;; ADD: Arithmetic DD
 (in-package :cl-cudd.baseapi)
 
 (defun cudd-add-cube (manager vars)

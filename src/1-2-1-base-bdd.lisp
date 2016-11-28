@@ -1,4 +1,4 @@
-;;; 
+;;; BDD : Binary Decision Diagram
 (in-package :cl-cudd.baseapi)
 
 (defun cudd-bdd-not (manager node)

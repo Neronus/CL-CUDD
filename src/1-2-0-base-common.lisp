@@ -1,4 +1,4 @@
-;;; 
+;;; functions on a raw cudd-node pointer
 (in-package :cl-cudd.baseapi)
 
 (defun cudd-regular (node)
