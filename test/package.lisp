@@ -31,8 +31,8 @@
                   (for index from 0)
                   (for h = (ecase c
                              (#\0 (node-complement
-                                   (make-var 'bdd-node :nr index)))
-                             (#\1 (make-var 'bdd-node :nr index))))
+                                   (make-var 'bdd-node :index index)))
+                             (#\1 (make-var 'bdd-node :index index))))
                   (setf g (node-and h g))
                   (finally
                    (setf f (node-or f g))))
