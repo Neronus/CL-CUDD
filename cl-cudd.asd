@@ -20,7 +20,7 @@
               (:file "src/1-0-1-conditions")
               (:file "src/1-0-2-translators")
               (:file "src/1-1-0-swig-macros")
-              (:file "src/1-1-1-grovel")
+              (:cffi-grovel-file "src/1-1-1-grovel")
               (:file "src/1-1-2-fun")
               (:file "src/1-2-0-base-common")
               (:file "src/1-2-1-base-add")
