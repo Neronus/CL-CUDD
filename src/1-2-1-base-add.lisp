@@ -28,7 +28,7 @@ invokes a signal otherwise.
 An ADD variable differs from a BDD variable because it points to the arithmetic zero,
 instead of having a complement pointer to 1."
   (when (and index level)
-    (error "ADD-VAR accepts at most one of I and LEVEL"))
+    (error "ADD-VAR accepts at most one of INDEX and LEVEL"))
   (cond
     (index (cudd-add-ith-var manager index))
     (level (cudd-add-new-var-at-level manager level))
