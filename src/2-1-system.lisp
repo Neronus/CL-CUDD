@@ -29,12 +29,6 @@ that the DdNode pointer bck is already referenced."
   "Counts the number of nodes in a DD."
   (cudd-dag-size (node-pointer node)))
 
-(defmethod cffi:translate-to-foreign (pointer (node node))
-  (node-pointer node))
-
-(defmethod cffi:translate-to-foreign (pointer (manager manager))
-  (manager-pointer manager))
-
 ;; (def-cudd-call disable-reordering ((:common cudd-disable-garbage-collection))
 ;;                :generic "Disables garbage collection. Garbage
 ;; collection is initially enabled. This function may be called to

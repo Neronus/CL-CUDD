@@ -16,6 +16,9 @@ Every function in this package works with this manager.")
   (:documentation
    "A boxed CUDD manager class"))
 
+(defmethod cffi:translate-to-foreign (pointer (manager manager))
+  (manager-pointer manager))
+
 (defmacro with-manager ((&key 
                          (initial-num-vars 0)
                          (initial-num-slots 256)
@@ -41,6 +44,9 @@ Every function in this package works with this manager.")
             :reader node-pointer))
   (:documentation
    "A boxed CUDD node class. Top class of all CUDD nodes."))
+
+(defmethod cffi:translate-to-foreign (pointer (node node))
+  (node-pointer node))
 
 (defmacro with-pointers (pointers &body body)
   "Create a binding to pointers using a let-like specification.
