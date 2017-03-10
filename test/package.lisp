@@ -2,7 +2,7 @@
 (in-package :cl-user)
 
 (defpackage cl-cudd.test
-  (:use :cl :cl-cudd :cl-cudd.baseapi :fiveam :iterate)
+  (:use :cl :cl-cudd :cl-cudd.baseapi :fiveam :iterate :trivia)
   (:shadow :next))
 
 (in-package cl-cudd.test)
@@ -13,42 +13,90 @@
 (defun models (kind)
   (directory (merge-pathnames "*.tests" (asdf:system-relative-pathname :cl-cudd (format nil "test/~a/" kind)))))
 
+;; we need a better api for creating a bdd
+
+(defun dump (path name f)
+  (cl-cudd.baseapi:dump-dot
+   (manager-pointer *manager*)
+   (cudd-regular (node-pointer f))
+   (namestring (make-pathname :name name :type "dot" :defaults path))))
+
 (defun parse-bdd (path)
   (fresh-line)
-  (flet ((dump (name f)
-           (cl-cudd.baseapi:dump-dot
-            ;; *manager*
-            ;; bdd
-            (manager-pointer *manager*)
-            (cudd-regular (node-pointer f))
-            (namestring (make-pathname :name name :type "dot" :defaults path)))))
-    (with-manager ()
-      (iter (with f = (zero-node 'bdd-node))
-            (for line in-file path using #'read-line)
-            (print line)
-            (iter (with g = (one-node 'bdd-node))
-                  (for c in-vector line)
-                  (for index from 0)
-                  (for h = (ecase c
-                             (#\0 (node-complement
-                                   (make-var 'bdd-node :index index)))
-                             (#\1 (make-var 'bdd-node :index index))))
-                  (setf g (node-and h g))
-                  (finally
-                   (setf f (node-or f g))))
-            (print f)
-            ;; (finish)
-            (finally
-             (dump (pathname-name path) f)
-             ;; since BDDs may contain complemented edges, it is slightly hard to understand.
-             ;; Usually converting it into ADDs will improve the output
-             (dump (format nil "~a-as-ADD" (pathname-name path))
-                   (bdd->add f)))))))
+  (with-manager ()
+    (let ((f
+           (reduce #'node-or
+                   (iter (for line in-file path using #'read-line)
+                         (collect
+                          (reduce #'node-and
+                                  (iter (for c in-vector line)
+                                        (for index from 0)
+                                        (collect
+                                         (ecase c
+                                           (#\0 (node-complement
+                                                 (make-var 'bdd-node :index index)))
+                                           (#\1 (make-var 'bdd-node :index index)))))
+                                  :initial-value (one-node 'bdd-node))))
+                   :initial-value (zero-node 'bdd-node))))
+      (print f)
+      (match path
+        ((pathname name)
+         (dump path (format nil "~a-BDD" name) f)
+         ;; since BDDs may contain complemented edges, it is slightly hard to understand.
+         ;; Usually converting it into ADDs will improve the output
+         (dump path (format nil "~a-BDD-as-ADD" name) (bdd->add f)))))))
 
 (test bdd
   (dolist (m (models "gates"))
     (finishes
       (parse-bdd m)))
+  (uiop:run-program (format nil "make -C ~a" (asdf:system-relative-pathname :cl-cudd "test/gates/"))
+                    :ignore-error-status t
+                    :output t
+                    :error-output t))
+
+(defun parse-add (path)
+  (fresh-line)
+  (with-manager ()
+    (let ((f
+           (reduce #'node-or
+                   (print
+                    (iter (for line in-file path using #'read-line)
+                         (pass)
+                         (collect
+                             (print
+                              (let ((number 0))
+                                (reduce #'node-and
+                                        (iter (for c in-vector line)
+                                              (for index from 0)
+                                              (incf number)
+                                              (pass)
+                                              (collect
+                                                  (ecase c
+                                                    (#\0 (node-complement
+                                                          (make-var 'add-node :index index)))
+                                                    (#\1 (make-var 'add-node :index index)))))
+                                        :initial-value (add-constant 1.0d0)))))
+                         (pass)))
+                   :initial-value (add-constant 0.0d0))))
+      (print f)
+      (match path
+        ((pathname name)
+         (dump path (format nil "~a-ADD" name) f))))))
+
+(test add
+  (with-manager ()
+    #+dontuse
+    (finishes (print (zero-node 'add-node)))
+    (finishes (print (add-constant 0.0d0)))
+    (finishes (print (node-and (make-var 'add-node :index 1)
+                               (add-constant 0.0d0))))
+    (finishes (print (node-or (make-var 'add-node :index 1)
+                              (add-constant 0.0d0)))))
+  (dolist (m (models "gates"))
+    (format t "~%testing model ~a" m)
+    (finishes
+      (parse-add m)))
   (uiop:run-program (format nil "make -C ~a" (asdf:system-relative-pathname :cl-cudd "test/gates/"))
                     :ignore-error-status t
                     :output t
