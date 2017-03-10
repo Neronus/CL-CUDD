@@ -1,6 +1,8 @@
 Common Lisp binding to CUDD 
 ===========================
 
+This is a fork of original CUDD using a modern common lisp convension, CFFI-Grovel and unit testing.
+
 What is CUDD?
 -------------
 [CUDD](http://vlsi.colorado.edu/~fabio/CUDD/)
@@ -17,33 +19,31 @@ about ADDs.
 The binding(s)
 --------------
 The binding consists of two layers:
-The lower layer is called `cuddapi` and is automatically generated
-using [SWIG](http://www.swig.org).
-The definition is found in file `cudd-cffi.i`. The original
-version was written by Utz-Uwe Haus, and then adapted to my needs here.
+The lower layer is called `cl-cudd.baseapi`.
+The initial version was automatically generated using [SWIG](http://www.swig.org) by Utz-Uwe Haus.
+The second version was adapted to the needs by Christian von Essen <christian.vonEssen@imag.fr>.
 If you want to use this layer, then it would be best to have a look
 at the CUDD manual. This layer is a very thin wrapper around the C library,
 passes raw pointers around and requires that you take care of reference counting.
 
-Above this layer there is a layer called `cudd`. It wraps the pointers
-from the lower layer, takes care of reference counting for you, and also
+Above this layer there is a layer called `cl-cudd` (with nickname `cudd`).
+It wraps the pointers from the lower layer, takes care of reference counting for you, and also
 adds documentation from the CUDD manual.
 
 Building/Loading the system
 ---------------------------
-You first need to build a shared library from CUDD (which doesn't do
-that automatically for some reason). See `Makefile` for that.
+The system is asdf-loadable.
+This version of CL-CUDD automatically fetches the CUDD archive from http://vlsi.colorado.edu/~fabio/CUDD/ into the
+ASDF system directory and builds its dynamic library, which is then loaded by CL-CUDD.
 
-CL-CUDD comes with an ASDF definition. So you add the directory
-containing `cl-cudd.asd` to your `asdf:*central-registry*` and
-then load CL-CUDD via `(asdf:operate 'asdf:load-op 'cl-cudd)`.
-
-This distribution comes with atomically generated bindings from
-CUDD in file `cuddapi.lisp`. If you want to regenerate the bindings
-for some reason, also see the `Makefile`. 
+To test the system, evaluate `(asdf:test-system :cl-cudd.test)`.
+It also writes the visualizations of the decision diagrams to the system directory in DOT format.
+If you have Graphviz installed, the test script also tries to convert the results into pdfs.
 
 Using the system
 ----------------
+
+The following description is subject to change.
 
 ### Low-level
 
