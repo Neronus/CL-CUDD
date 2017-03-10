@@ -47,10 +47,10 @@ Above this layer there is a package named `cl-cudd` (with a nickname `cudd`).
 It wraps the pointers from the lower layer, takes care of reference counting for you, and also
 adds documentation from the CUDD manual.
 
-Constructing a DD
------------------
+DD Construction Examples
+------------------------
 
-### Represent a binary function using BDD
+### Representing a binary function using BDD
 
 Suppose you have a binary function denoted as `b = f(x0,x1,...xn)` which can be expressed in a DNF formula such as
 `(or (and x0 (not x1) x2) ...)`.
@@ -100,6 +100,70 @@ flag designating the complement arc is stored in the least significant bit in
 the else-branch pointer. Complement arc reduces the memory usage and cache usage
 because taking a complement of a node is a common operation, and complementing a
 node without such arc may create a huge number of nodes.
+
+### Representing real functions using ADD and taking their symbolic sum
+
+In ADD, the terminal node can have a value instead of boolean (in BDD), and you
+are able to perform various arithmetic operations in the closed form, i.e. for
+two ADDs (functions) `f` and `g`, you can obtain `f+g` efficiently.
+
+Imagine `f(x1,x2)` and `g(x1,x2)` takes the following values:
+
+| x1 | x2 | f(x1,x2) |
+|:--:|:--:|:--------:|
+| 0  | 0  |  2       |
+| 0  | 1  |  2       |
+| 1  | 0  |  3       |
+| 1  | 1  |  5       |
+
+| x1 | x2 | g(x1,x2) |
+|:--:|:--:|:--------:|
+| 0  | 0  |  4       |
+| 0  | 1  |  4       |
+| 1  | 0  |  3       |
+| 1  | 1  |  7       |
+
+
+```lisp
+;; f
+(-> (-> (ADD-constant 2)
+        (node-and (node-complement (make-var 'ADD-node :index 0)))
+        (node-and (node-complement (make-var 'ADD-node :index 1))))
+    (-> (ADD-constant 2)
+        (node-and (node-complement (make-var 'ADD-node :index 0)))
+        (node-and (make-var 'ADD-node :index 1)))
+    (-> (ADD-constant 3)
+        (node-and (make-var 'ADD-node :index 0))
+        (node-and (node-complement (make-var 'ADD-node :index 1))))
+    (-> (ADD-constant 5)
+        (node-and (make-var 'ADD-node :index 0))
+        (node-and (make-var 'ADD-node :index 1))))
+
+;; f
+(-> (-> (ADD-constant 4)
+        (node-and (node-complement (make-var 'ADD-node :index 0)))
+        (node-and (node-complement (make-var 'ADD-node :index 1))))
+    (-> (ADD-constant 4)
+        (node-and (node-complement (make-var 'ADD-node :index 0)))
+        (node-and (make-var 'ADD-node :index 1)))
+    (-> (ADD-constant 3)
+        (node-and (make-var 'ADD-node :index 0))
+        (node-and (node-complement (make-var 'ADD-node :index 1))))
+    (-> (ADD-constant 7)
+        (node-and (make-var 'ADD-node :index 0))
+        (node-and (make-var 'ADD-node :index 1))))
+
+(ADD-apply +plus+ f g) ;; -> an ADD representing (f+g)(x1,x2)
+```
+
+### Representing a family of set using ZDD
+
+ZDD is notoriously famous among Japanese CS researchers due to the hype in
+https://www.youtube.com/watch?v=Q4gTV4r0zRs . It is actually quite powerful and
+is superior to BDD when *most of the paths leads to the zero-node*, and is
+particularly useful for representing a family of sets.
+
+
 
 
 System structure
@@ -178,7 +242,3 @@ Using the GC to do reference counting automatically has its own share of problem
    the reference count of `dd`.
    
    Solution: Again, use `with-pointers` instead of `node-pointer`.
-
-Examples
---------
-*TODO*
