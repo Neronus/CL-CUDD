@@ -118,7 +118,8 @@ every node in the body and decreasing it after the body is run"
                          arg))
                    arguments)))
     `(defgeneric ,generic-name ,(clean-arguments arguments)
-       (:documentation ,generic-docu))))
+       ,@(when generic-docu
+           `((:documentation ,generic-docu))))))
 
 
 
