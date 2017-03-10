@@ -109,20 +109,12 @@ two ADDs (functions) `f` and `g`, you can obtain `f+g` efficiently.
 
 Imagine `f(x1,x2)` and `g(x1,x2)` takes the following values:
 
-| x1 | x2 | f(x1,x2) |
-|:--:|:--:|:--------:|
-| 0  | 0  |  2       |
-| 0  | 1  |  2       |
-| 1  | 0  |  3       |
-| 1  | 1  |  5       |
-
-| x1 | x2 | g(x1,x2) |
-|:--:|:--:|:--------:|
-| 0  | 0  |  4       |
-| 0  | 1  |  4       |
-| 1  | 0  |  3       |
-| 1  | 1  |  7       |
-
+| x1 | x2 | f(x1,x2) | g(x1,x2) |
+|:--:|:--:|:--------:|:--------:|
+| 0  | 0  |  2       |  4       |
+| 0  | 1  |  2       |  4       |
+| 1  | 0  |  3       |  3       |
+| 1  | 1  |  5       |  7       |
 
 ```lisp
 ;; f
@@ -142,25 +134,39 @@ Imagine `f(x1,x2)` and `g(x1,x2)` takes the following values:
             (node-and (make-var 'ADD-node :index 0))
             (node-and (make-var 'ADD-node :index 1)))))
 
-;; f
-(-> (-> (ADD-constant 4)
-        (node-and (node-complement (make-var 'ADD-node :index 0)))
-        (node-and (node-complement (make-var 'ADD-node :index 1))))
-    (node-or
-        (-> (ADD-constant 4)
-            (node-and (node-complement (make-var 'ADD-node :index 0)))
-            (node-and (make-var 'ADD-node :index 1))))
-    (node-or
-        (-> (ADD-constant 3)
-            (node-and (make-var 'ADD-node :index 0))
-            (node-and (node-complement (make-var 'ADD-node :index 1)))))
-    (node-or
-        (-> (ADD-constant 7)
-            (node-and (make-var 'ADD-node :index 0))
-            (node-and (make-var 'ADD-node :index 1)))))
+;; g 
+(-> ...) ;; omitted
 
 (ADD-apply +plus+ f g) ;; -> an ADD representing (f+g)(x1,x2)
 ```
+
+Other possible arguments to `ADD-apply` are
+
+* `+plus+` - Integer and floating point addition
+* `+times+` - Integer and floating point multiplication.
+* `+threshold+` - Threshold operator for Apply (f if f >=g; 0 if f<g)
+* `+set-NZ+` - This operator sets f to the value of g wherever g != 0.
+* `+divide+` - Integer and floating point division.
+* `+minus+` - Integer and floating point substraction.
+* `+minimum+` - Integer and floating point minimum.
+* `+maximum+` - Integer and floating point maximum.
+* `+one-zero-maximum+` - 1 if f > g and 0 otherwise.
+* `+diff+` - Returns NULL if not a terminal case; f op g otherwise, where f op g is plusinfinity if f=g; min(f,g) if f!=g.
+* `+agreement+` - op g,  where f op g is f if f==g; background if f!=g.
+* `+or+` - Disjunction of two 0-1 ADDs.
+* `+nand+` - NAND of two 0-1 ADDs.
+* `+nor+` - NOR of two 0-1 ADDs.
+* `+xor+` - XOR of two 0-1 ADDs.
+* `+xnor+` - XNOR of two 0-1 ADDs.
+* `+equals+` - f op g, where f op g is 1 if f==g, 0 otherwise
+* `+not-equals+` - f op g, where f op g is 1 if f!=g; 0 otherwise
+* `+greater-than+` - f > g, where f op g is 1 if f!=g; 0 otherwise
+* `+greater-than-equals+` -  if f >= g, 0 otherwise
+* `+less-than+` -  < g, where f op g is 1 if f!=g; 0 otherwise
+* `+less-than-equals+` -  <= g, where f op g is 1 if f!=g; 0 otherwise
+* `+pow+` - f to the power of g
+* `+mod+` - f modulo g
+* `+log-x-y+` - log f base g
 
 ### Representing a family of set using ZDD
 
