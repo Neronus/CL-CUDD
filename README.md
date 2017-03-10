@@ -1,4 +1,4 @@
-Common Lisp binding to CUDD 
+Common Lisp binding to CUDD [![Build Status](https://travis-ci.org/guicho271828/CL-CUDD.svg?branch=master)](https://travis-ci.org/guicho271828/CL-CUDD)
 ===========================
 
 This is a fork of original CUDD using a modern common lisp convension, CFFI-Grovel and unit testing.
