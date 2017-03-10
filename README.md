@@ -129,29 +129,35 @@ Imagine `f(x1,x2)` and `g(x1,x2)` takes the following values:
 (-> (-> (ADD-constant 2)
         (node-and (node-complement (make-var 'ADD-node :index 0)))
         (node-and (node-complement (make-var 'ADD-node :index 1))))
-    (-> (ADD-constant 2)
-        (node-and (node-complement (make-var 'ADD-node :index 0)))
-        (node-and (make-var 'ADD-node :index 1)))
-    (-> (ADD-constant 3)
-        (node-and (make-var 'ADD-node :index 0))
-        (node-and (node-complement (make-var 'ADD-node :index 1))))
-    (-> (ADD-constant 5)
-        (node-and (make-var 'ADD-node :index 0))
-        (node-and (make-var 'ADD-node :index 1))))
+    (node-or
+        (-> (ADD-constant 2)
+            (node-and (node-complement (make-var 'ADD-node :index 0)))
+            (node-and (make-var 'ADD-node :index 1))))
+    (node-or
+        (-> (ADD-constant 3)
+            (node-and (make-var 'ADD-node :index 0))
+            (node-and (node-complement (make-var 'ADD-node :index 1)))))
+    (node-or
+        (-> (ADD-constant 5)
+            (node-and (make-var 'ADD-node :index 0))
+            (node-and (make-var 'ADD-node :index 1)))))
 
 ;; f
 (-> (-> (ADD-constant 4)
         (node-and (node-complement (make-var 'ADD-node :index 0)))
         (node-and (node-complement (make-var 'ADD-node :index 1))))
-    (-> (ADD-constant 4)
-        (node-and (node-complement (make-var 'ADD-node :index 0)))
-        (node-and (make-var 'ADD-node :index 1)))
-    (-> (ADD-constant 3)
-        (node-and (make-var 'ADD-node :index 0))
-        (node-and (node-complement (make-var 'ADD-node :index 1))))
-    (-> (ADD-constant 7)
-        (node-and (make-var 'ADD-node :index 0))
-        (node-and (make-var 'ADD-node :index 1))))
+    (node-or
+        (-> (ADD-constant 4)
+            (node-and (node-complement (make-var 'ADD-node :index 0)))
+            (node-and (make-var 'ADD-node :index 1))))
+    (node-or
+        (-> (ADD-constant 3)
+            (node-and (make-var 'ADD-node :index 0))
+            (node-and (node-complement (make-var 'ADD-node :index 1)))))
+    (node-or
+        (-> (ADD-constant 7)
+            (node-and (make-var 'ADD-node :index 0))
+            (node-and (make-var 'ADD-node :index 1)))))
 
 (ADD-apply +plus+ f g) ;; -> an ADD representing (f+g)(x1,x2)
 ```
@@ -160,7 +166,7 @@ Imagine `f(x1,x2)` and `g(x1,x2)` takes the following values:
 
 ZDD is notoriously famous among Japanese CS researchers due to the hype in
 https://www.youtube.com/watch?v=Q4gTV4r0zRs . It is actually quite powerful and
-is superior to BDD when *most of the paths leads to the zero-node*, and is
+is a better option than BDD when *most of the paths leads to the zero-node*, and is
 particularly useful for representing a family of sets.
 
 
