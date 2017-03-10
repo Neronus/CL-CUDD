@@ -13,4 +13,5 @@ exec ros -Q -- $0 "$@"
 (print (machine-version))
 (print (long-site-name))
 
+(ql:quickload :cffi-grovel)
 (asdf:test-system :cl-cudd.test)
