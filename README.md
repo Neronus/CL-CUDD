@@ -3,13 +3,18 @@ Common Lisp binding to CUDD [![Build Status](https://travis-ci.org/guicho271828/
 
 This is a fork of original CUDD using a modern common lisp convension, CFFI-Grovel and unit testing.
 
+Supported implementations: SBCL, CCL and ECL.
+
 Requirements: make, curl
 
-What is CUDD?
+What is BDDs and CUDD?
 -------------
+
+BDDs (Binary Decision Diagrams) are awesome datastructures that can compactly represent exponentially large number of datasets, as well as allowing the direct computation over the compressed representation (i.e. you do not have to decompress the datastructure in order to conduct addition and multiplication!)
+
 [CUDD](http://vlsi.colorado.edu/~fabio/CUDD/)
-is an implementation of Binary Decision Diagrams (BDDs) and
-Multi-Terminal Binary Decision Diagrams (MTBDDs or ADDs).
+is a famous implementation of BDDs and its relatives: 
+Multi-Terminal Binary Decision Diagrams (MTBDDs or ADDs) and Zero-suppressed Decision Diagrams.
 
 For more information, see either
 [Wikipedia](http://en.wikipedia.org/wiki/Binary_decision_diagram)
@@ -17,20 +22,6 @@ or the first [paper](http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=167514
 about BDDs and the first
 [paper](http://repository.cmu.edu/cgi/viewcontent.cgi?article=1456&context=compsci)
 about ADDs.
-
-The binding(s)
---------------
-The binding consists of two layers:
-The lower layer is called `cl-cudd.baseapi`.
-The initial version was automatically generated using [SWIG](http://www.swig.org) by Utz-Uwe Haus.
-The second version was adapted to the needs by Christian von Essen <christian.vonEssen@imag.fr>.
-If you want to use this layer, then it would be best to have a look
-at the CUDD manual. This layer is a very thin wrapper around the C library,
-passes raw pointers around and requires that you take care of reference counting.
-
-Above this layer there is a layer called `cl-cudd` (with nickname `cudd`).
-It wraps the pointers from the lower layer, takes care of reference counting for you, and also
-adds documentation from the CUDD manual.
 
 Building/Loading the system
 ---------------------------
@@ -42,10 +33,77 @@ To test the system, evaluate `(asdf:test-system :cl-cudd.test)`.
 It also writes the visualizations of the decision diagrams to the system directory in DOT format.
 If you have Graphviz installed, the test script also tries to convert the results into pdfs.
 
-Using the system
-----------------
+The binding(s)
+--------------
+The binding consists of two layers:
+The lower layer has `cl-cudd.baseapi` package.
+The initial version was automatically generated using [SWIG](http://www.swig.org) by Utz-Uwe Haus.
+The second version was adapted to the needs by Christian von Essen <christian.vonEssen@imag.fr>.
+If you want to use this layer, then it would be best to have a look
+at the CUDD manual. This layer is a very thin wrapper around the C library,
+passes raw pointers around and requires that you take care of reference counting.
 
-The following description is subject to change.
+Above this layer there is a package named `cl-cudd` (with a nickname `cudd`).
+It wraps the pointers from the lower layer, takes care of reference counting for you, and also
+adds documentation from the CUDD manual.
+
+Constructing a DD
+-----------------
+
+### Represent a binary function using BDD
+
+Suppose you have a binary function denoted as `b = f(x0,x1,...xn)` which can be expressed in a DNF formula such as
+`(or (and x0 (not x1) x2) ...)`.
+To begin with, we construct the first disjunction, which is in this case `(and x0 (not x1) x2)`.
+It can be implemented as follows:
+
+```lisp
+;; functional
+(reduce #'node-and
+        (list (make-var 'bdd-node :index 0)
+              (node-complement (make-var 'bdd-node :index 1))
+              (make-var 'bdd-node :index 2))
+        :initial-value (one-node 'bdd-node))
+
+;; imperative
+(let ((f (one-node 'bdd-node)))
+  (setf f (node-and f (make-var 'bdd-node :index 0)))
+  (setf f (node-and f (node-complement (make-var 'bdd-node :index 1))))
+  (setf f (node-and f (make-var 'bdd-node :index 2)))
+  f)
+
+;; with a threading macro
+
+(ql:quickload :arrow-macros) (use-package :arrow-macros)
+
+(-> (one-node 'bdd-node)
+    (node-and (make-var 'bdd-node :index 0))
+    (node-and (node-complement (make-var 'bdd-node :index 1)))
+    (node-and (make-var 'bdd-node :index 2)))
+```
+
+To take the disjunction of conjunctions, there are similarly named `node-or` function and `zero-node` function.
+
+```lisp
+(-> (zero-node 'bdd-node)
+    (node-or bdd1)
+    (node-or bdd2)
+    ...)
+```
+
+I don't think you need further explanation but there is one thing to note about
+for those unfamiliar with CUDD package. The function `node-complement` turns a
+variable into a node having a "complement" arc whose meaning of true-branch and
+false-branch are opposite from the standard node. Complement arcs exist for the
+performance. Detailed explanations are included in the CUDD manual. Briefly, the
+flag designating the complement arc is stored in the least significant bit in
+the else-branch pointer. Complement arc reduces the memory usage and cache usage
+because taking a complement of a node is a common operation, and complementing a
+node without such arc may create a huge number of nodes.
+
+
+System structure
+----------------
 
 ### Low-level
 
