@@ -13,6 +13,9 @@ exec ros -Q -- $0 "$@"
 (print (machine-version))
 (print (long-site-name))
 
-(ql:quickload :cffi-grovel)
-(ql:quickload :cl-cudd.test)
-(asdf:test-system :cl-cudd.test)
+
+(defun main (&rest argv)
+  (declare (ignorable argv))
+  (ql:quickload :cffi-grovel)
+  (ql:quickload :cl-cudd.test)
+  (asdf:test-system :cl-cudd.test))
