@@ -3,6 +3,8 @@ Common Lisp binding to CUDD
 
 This is a fork of original CUDD using a modern common lisp convension, CFFI-Grovel and unit testing.
 
+Requirements: make, curl
+
 What is CUDD?
 -------------
 [CUDD](http://vlsi.colorado.edu/~fabio/CUDD/)
@@ -33,8 +35,8 @@ adds documentation from the CUDD manual.
 Building/Loading the system
 ---------------------------
 The system is asdf-loadable.
-This version of CL-CUDD automatically fetches the CUDD archive from http://vlsi.colorado.edu/~fabio/CUDD/ into the
-ASDF system directory and builds its dynamic library, which is then loaded by CL-CUDD.
+This version of CL-CUDD automatically fetches the CUDD archive from http://vlsi.colorado.edu/~fabio/CUDD/ via curl.
+The archive is expanded in the ASDF system directory and builds its dynamic library, which is then loaded by CL-CUDD.
 
 To test the system, evaluate `(asdf:test-system :cl-cudd.test)`.
 It also writes the visualizations of the decision diagrams to the system directory in DOT format.
