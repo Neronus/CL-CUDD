@@ -92,18 +92,25 @@ instead of having a complement pointer to 1."))
 (defmethod node-else :before (node)
   (assert (not (node-constant-p node))))
 
+#|
 
-(def-cudd-call zero-node ((:add (lambda (dd type) (wrap-and-finalize (cudd-read-zero dd) type))
-                           :bdd (lambda (dd type) (wrap-and-finalize (cudd-read-logic-zero dd) type)))
-                          type)
-  :add "Return the arithmetic zero node (0.0d0)."
-  :bdd "Return the logical zero node (boolean 0)."
-  :dont-wrap-result t)
+ Although the manual says that the constant 1 is same across A/B/ZDDs and
+  constant 0 is obtained by Cudd_ReadZero,
+ somehow, CUDD-READ-ZERO and CUDD-READ-ONE did not work for ADDs.
 
-(def-cudd-call one-node ((:common (lambda (dd type)
-                                     (wrap-and-finalize
-                                      (cudd-read-one dd)
-                                      type)))
+|#
+
+(defgeneric zero-node (type))
+
+(defmethod zero-node ((type (eql 'bdd-node)))
+  "Return the logical zero node (boolean 0)."
+  (wrap-and-finalize (cudd-read-logic-zero (manager-pointer *manager*)) type))
+
+(defmethod zero-node ((type (eql 'add-node)))
+  "Return the arithmetic zero node (0.0d0)."
+  (wrap-and-finalize (cudd-read-zero (manager-pointer *manager*)) type))
+
+(def-cudd-call one-node ((:common (lambda (dd type) (wrap-and-finalize (cudd-read-one dd) type)))
                          type)
   :generic "Return the one node."
   :dont-wrap-result t)

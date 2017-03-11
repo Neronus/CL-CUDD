@@ -76,9 +76,9 @@
                                                     (#\0 (node-complement
                                                           (make-var 'add-node :index index)))
                                                     (#\1 (make-var 'add-node :index index)))))
-                                        :initial-value (add-constant 1.0d0)))))
+                                        :initial-value (one-node 'add-node)))))
                          (pass)))
-                   :initial-value (add-constant 0.0d0))))
+                   :initial-value (zero-node 'add-node))))
       (print f)
       (match path
         ((pathname name)
@@ -86,13 +86,16 @@
 
 (test add
   (with-manager ()
-    #+dontuse
     (finishes (print (zero-node 'add-node)))
     (finishes (print (add-constant 0.0d0)))
     (finishes (print (node-and (make-var 'add-node :index 1)
-                               (add-constant 0.0d0))))
+                               (one-node 'add-node))))
     (finishes (print (node-or (make-var 'add-node :index 1)
-                              (add-constant 0.0d0)))))
+                              (one-node 'add-node))))
+    (finishes (print (node-and (make-var 'add-node :index 1)
+                               (zero-node 'add-node))))
+    (finishes (print (node-or (make-var 'add-node :index 1)
+                              (zero-node 'add-node)))))
   (dolist (m (models "gates"))
     (format t "~%testing model ~a" m)
     (finishes
