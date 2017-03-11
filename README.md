@@ -143,31 +143,22 @@ Imagine `f(x1,x2)` and `g(x1,x2)` takes the following values:
 
 Other possible arguments to `ADD-apply` are
 
-* `+plus+` - Integer and floating point addition
-* `+times+` - Integer and floating point multiplication.
-* `+threshold+` - Threshold operator for Apply (f if f >=g; 0 if f<g)
-* `+set-NZ+` - This operator sets f to the value of g wherever g != 0.
-* `+divide+` - Integer and floating point division.
-* `+minus+` - Integer and floating point substraction.
-* `+minimum+` - Integer and floating point minimum.
-* `+maximum+` - Integer and floating point maximum.
-* `+one-zero-maximum+` - 1 if f > g and 0 otherwise.
-* `+diff+` - Returns NULL if not a terminal case; f op g otherwise, where f op g is plusinfinity if f=g; min(f,g) if f!=g.
-* `+agreement+` - op g,  where f op g is f if f==g; background if f!=g.
-* `+or+` - Disjunction of two 0-1 ADDs.
-* `+nand+` - NAND of two 0-1 ADDs.
-* `+nor+` - NOR of two 0-1 ADDs.
-* `+xor+` - XOR of two 0-1 ADDs.
-* `+xnor+` - XNOR of two 0-1 ADDs.
-* `+equals+` - f op g, where f op g is 1 if f==g, 0 otherwise
-* `+not-equals+` - f op g, where f op g is 1 if f!=g; 0 otherwise
-* `+greater-than+` - f > g, where f op g is 1 if f!=g; 0 otherwise
-* `+greater-than-equals+` -  if f >= g, 0 otherwise
-* `+less-than+` -  < g, where f op g is 1 if f!=g; 0 otherwise
-* `+less-than-equals+` -  <= g, where f op g is 1 if f!=g; 0 otherwise
-* `+pow+` - f to the power of g
-* `+mod+` - f modulo g
-* `+log-x-y+` - log f base g
+* `+XNOR+` (originally Cudd_addXnor) -- XNOR of two 0-1 ADDs.
+* `+XOR+` (originally Cudd_addXor) -- XOR of two 0-1 ADDs.
+* `+NOR+` (originally Cudd_addNor) -- NOR of two 0-1 ADDs.
+* `+NAND+` (originally Cudd_addNand) -- NAND of two 0-1 ADDs.
+* `+OR+` (originally Cudd_addOr) -- Disjunction of two 0-1 ADDs.
+* `+AGREEMENT+` (originally Cudd_addAgreement) -- f op g,  where f op g is f if f==g; background if f!=g.
+* `+DIFF+` (originally Cudd_addDiff) -- f op g , where f op g is plusinfinity if f=g; min(f,g) if f!=g.
+* `+ONE-ZERO-MAXIMUM+` (originally Cudd_addOneZeroMaximum) -- 1 if f > g and 0 otherwise.
+* `+MAXIMUM+` (originally Cudd_addMaximum) -- Integer and floating point maximum.
+* `+MINIMUM+` (originally Cudd_addMinimum) -- Integer and floating point minimum.
+* `+MINUS+` (originally Cudd_addMinus) -- Integer and floating point substraction.
+* `+DIVIDE+` (originally Cudd_addDivide) -- Integer and floating point division.
+* `+SET-NZ+` (originally Cudd_addSetNZ) -- This operator sets f to the value of g wherever g != 0.
+* `+THRESHOLD+` (originally Cudd_addThreshold) -- Threshold operator for Apply (f if f >=g; 0 if f<g)
+* `+TIMES+` (originally Cudd_addTimes) -- Integer and floating point multiplication.
+* `+PLUS+` (originally Cudd_addPlus) -- Integer and floating point addition
 
 ### Representing a family of set using ZDD
 
