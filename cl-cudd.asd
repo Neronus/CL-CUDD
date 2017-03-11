@@ -29,12 +29,12 @@
               (:file "src/2-0-0-manager")
               (:file "src/2-0-1-node")
               (:file "src/2-0-2-def-cudd-call")
-              (:file "src/2-1-add-bdd-bridge")
               (:file "src/2-1-add")
               (:file "src/2-1-generic-complex")
               (:file "src/2-1-generic-simple")
               (:file "src/2-1-generic-swap")
-              (:file "src/2-1-system"))
+              (:file "src/2-1-system")
+              (:file "src/2-2-add-bdd-bridge"))
  :description "A two-layered binding to the CUDD binary decision diagram library.
 
 See README.md for more details."
