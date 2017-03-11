@@ -545,6 +545,7 @@
 
    #:plus-infinity
    #:minus-infinity
+   #:epsilon
 
    #:min-abstract
    #:max-abstract

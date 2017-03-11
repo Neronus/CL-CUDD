@@ -16,6 +16,10 @@
   :generic
   "Return node with value -infinity.")
 
+(def-cudd-call epsilon ((:add cudd-read-epsilon))
+  :generic
+  "Return node with value infinity.")
+
 ;;; Functions for add-apply
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (defvar *add-operators* nil)
