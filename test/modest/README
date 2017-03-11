@@ -1,0 +1,15 @@
+
+input:
+
+these *.tests files are downloaded from http://web.eecs.umich.edu/~jhayes/iscas.restore/benchmark.html
+
+output:
+
+beware the "complemented" arcs.
+
+a solid  line -------- is a normal "then" arc
+a dashed line -- -- -- is a normal "else" arc
+a dotted line  -  -  - is a complemented "else" arc
+
+*-as-ADD is obtained by converting a BDD into ADD to remove the complemented edges.
+(this gives a picture that is more intuitive)

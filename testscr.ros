@@ -1,0 +1,21 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#|
+exec ros -Q -- $0 "$@"
+|#
+
+(print (lisp-implementation-type))
+(print (lisp-implementation-version))
+(print (software-type))
+(print (software-version))
+(print (machine-instance))
+(print (machine-type))
+(print (machine-version))
+(print (long-site-name))
+
+
+(defun main (&rest argv)
+  (declare (ignorable argv))
+  (ql:quickload :cffi-grovel)
+  (ql:quickload :cl-cudd.test)
+  (asdf:test-system :cl-cudd.test))

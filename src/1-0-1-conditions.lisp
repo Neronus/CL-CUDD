@@ -1,0 +1,12 @@
+(in-package :cl-cudd.baseapi)
+
+(define-condition cudd-condition (condition) ())
+(define-condition cudd-error (cudd-condition error) ())
+(define-condition cudd-null-pointer-error (cudd-error) ()
+  (:report (lambda (condition stream)
+             (declare (ignore condition))
+             (format stream "A CUDD function returned a null-pointer"))))
+(define-condition cudd-null-manager-error (cudd-error) ()
+  (:report (lambda (condition stream)
+             (declare (ignore condition))
+             (format stream "Could not construct a CUDD manager"))))
