@@ -63,13 +63,14 @@ It can be implemented as follows:
         (list (make-var 'bdd-node :index 0)
               (node-complement (make-var 'bdd-node :index 1))
               (make-var 'bdd-node :index 2))
+        :from-end t ;; more efficient when BDDs are build bottom-up
         :initial-value (one-node 'bdd-node))
 
 ;; imperative
 (let ((f (one-node 'bdd-node)))
-  (setf f (node-and f (make-var 'bdd-node :index 0)))
-  (setf f (node-and f (node-complement (make-var 'bdd-node :index 1))))
   (setf f (node-and f (make-var 'bdd-node :index 2)))
+  (setf f (node-and f (node-complement (make-var 'bdd-node :index 1))))
+  (setf f (node-and f (make-var 'bdd-node :index 0)))
   f)
 
 ;; with a threading macro
@@ -77,9 +78,9 @@ It can be implemented as follows:
 (ql:quickload :arrow-macros) (use-package :arrow-macros)
 
 (-> (one-node 'bdd-node)
-    (node-and (make-var 'bdd-node :index 0))
+    (node-and (make-var 'bdd-node :index 2))
     (node-and (node-complement (make-var 'bdd-node :index 1)))
-    (node-and (make-var 'bdd-node :index 2)))
+    (node-and (make-var 'bdd-node :index 0)))
 ```
 
 To take the disjunction of conjunctions, there are similarly named `node-or` function and `zero-node` function.
