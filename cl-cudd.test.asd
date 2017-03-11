@@ -7,7 +7,7 @@
  :author "Masataro Asai"
  :mailto "guicho2.71828@gmail.com"
  :license "BSD Style (see LICENSE)"
- :depends-on (:cl-cudd :fiveam :iterate)
+ :depends-on (:cl-cudd :fiveam :iterate :trivia :arrow-macros)
  :serial t
  :components ((:file "test/package"))
  :description "A two-layered binding to the CUDD binary decision diagram library.
