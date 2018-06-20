@@ -138,8 +138,7 @@
 
 (let ((libdir "/opt/local/lib/cudd/"))
   (when (probe-file libdir)
-    (pushnew libdir cffi:*foreign-library-directories* :test #'string=)))
-                
+    (pushnew libdir cffi:*foreign-library-directories* :test #'equal)))
 
 (cffi:use-foreign-library libcudd)
 
